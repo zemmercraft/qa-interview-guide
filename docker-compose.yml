@@ -1,0 +1,38 @@
+services:
+
+  # Статический сайт с гайдом: http://localhost:8000
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    restart: unless-stopped
+
+  # Ollama — локальная LLM для квиза
+  ollama:
+    image: ollama/ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: unless-stopped
+
+  # Квиз в интерактивном режиме (запускать вручную: docker compose run --rm quiz)
+  quiz:
+    build: .
+    volumes:
+      - .:/app
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+    depends_on:
+      - ollama
+    stdin_open: true
+    tty: true
+    profiles:
+      - quiz
+    command: >
+      python3 quiz.py --local --ollama-url http://ollama:11434
+
+volumes:
+  ollama_data:

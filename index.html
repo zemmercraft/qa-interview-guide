@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QA Automation Java — Interview Guide</title>
+
+    <!-- Marked: парсинг markdown -->
+    <script src="https://cdn.jsdelivr.net/npm/marked@12.0.0/marked.min.js"></script>
+    <!-- Mermaid: диаграммы -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.0/dist/mermaid.min.js"></script>
+    <!-- highlight.js: подсветка кода -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/java.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/sql.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/yaml.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/bash.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/xml.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/dockerfile.min.js"></script>
+
+    <style>
+        :root {
+            --bg: #0f1115;
+            --panel: #161922;
+            --panel-2: #1c2030;
+            --border: #2a2f3e;
+            --text: #d8dee9;
+            --text-dim: #8b93a7;
+            --accent: #5cb3ff;
+            --accent-hover: #7dc4ff;
+            --critical: #ff6b6b;
+            --high: #ffa94d;
+            --medium: #94c5ff;
+            --code-bg: #1a1d27;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        aside {
+            background: var(--panel);
+            border-right: 1px solid var(--border);
+            padding: 24px 0;
+            overflow-y: auto;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+        }
+
+        aside h1 {
+            font-size: 16px;
+            margin: 0 20px 4px;
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        aside .subtitle {
+            margin: 0 20px 20px;
+            font-size: 12px;
+            color: var(--text-dim);
+        }
+
+        aside .search {
+            margin: 0 16px 16px;
+        }
+
+        aside .search input {
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: var(--panel-2);
+            color: var(--text);
+            font-size: 13px;
+            outline: none;
+        }
+
+        aside .search input:focus {
+            border-color: var(--accent);
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav li a {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            padding: 9px 20px;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 14px;
+            border-left: 3px solid transparent;
+            transition: background 0.15s, border-color 0.15s;
+        }
+
+        nav li a:hover {
+            background: var(--panel-2);
+        }
+
+        nav li a.active {
+            background: var(--panel-2);
+            border-left-color: var(--accent);
+            color: var(--accent);
+        }
+
+        nav li a .num {
+            color: var(--text-dim);
+            font-size: 12px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        nav li a .pri {
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        nav li a .pri.critical { background: rgba(255, 107, 107, 0.15); color: var(--critical); }
+        nav li a .pri.high     { background: rgba(255, 169, 77, 0.15);  color: var(--high); }
+        nav li a .pri.medium   { background: rgba(148, 197, 255, 0.15); color: var(--medium); }
+
+        /* Main */
+        main {
+            padding: 40px 56px 80px;
+            max-width: 980px;
+            width: 100%;
+        }
+
+        .loader {
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        /* Markdown reset */
+        article h1 { font-size: 28px; margin-top: 0; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
+        article h2 { font-size: 22px; margin-top: 36px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+        article h3 { font-size: 18px; margin-top: 28px; color: var(--accent); }
+        article h4 { font-size: 16px; margin-top: 20px; color: var(--text); }
+        article p, article li { color: var(--text); }
+        article a { color: var(--accent); text-decoration: none; }
+        article a:hover { color: var(--accent-hover); text-decoration: underline; }
+
+        article code {
+            background: var(--code-bg);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+            font-size: 13px;
+            color: #e8c478;
+        }
+
+        article pre {
+            background: var(--code-bg);
+            padding: 16px;
+            border-radius: 8px;
+            overflow-x: auto;
+            border: 1px solid var(--border);
+        }
+
+        article pre code {
+            padding: 0;
+            background: transparent;
+            color: inherit;
+            font-size: 13.5px;
+            line-height: 1.55;
+        }
+
+        article blockquote {
+            border-left: 4px solid var(--accent);
+            background: var(--panel-2);
+            margin: 16px 0;
+            padding: 8px 16px;
+            color: var(--text-dim);
+            border-radius: 0 6px 6px 0;
+        }
+
+        article table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 16px 0;
+            font-size: 14px;
+        }
+
+        article th, article td {
+            border: 1px solid var(--border);
+            padding: 10px 14px;
+            text-align: left;
+        }
+
+        article th {
+            background: var(--panel-2);
+            font-weight: 600;
+        }
+
+        article tr:nth-child(even) {
+            background: var(--panel);
+        }
+
+        article hr {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 32px 0;
+        }
+
+        article ul, article ol {
+            padding-left: 24px;
+        }
+
+        article li {
+            margin: 6px 0;
+        }
+
+        article input[type="checkbox"] {
+            margin-right: 8px;
+            transform: translateY(2px);
+        }
+
+        /* Mermaid */
+        .mermaid {
+            text-align: center;
+            margin: 24px 0;
+            background: var(--panel-2);
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        /* Toolbar / footer of main */
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+            color: var(--text-dim);
+        }
+
+        .breadcrumb {
+            display: flex;
+            gap: 8px;
+        }
+
+        .breadcrumb .sep { color: var(--text-dim); }
+
+        .nav-arrows {
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav-arrows button {
+            background: var(--panel-2);
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .nav-arrows button:hover:not(:disabled) {
+            background: var(--border);
+            border-color: var(--accent);
+        }
+
+        .nav-arrows button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .error {
+            background: rgba(255, 107, 107, 0.1);
+            border: 1px solid var(--critical);
+            color: var(--critical);
+            padding: 16px;
+            border-radius: 6px;
+            margin: 16px 0;
+        }
+
+        .error code {
+            background: rgba(0, 0, 0, 0.3);
+            color: #ffd0d0;
+        }
+
+        @media (max-width: 900px) {
+            .layout { grid-template-columns: 1fr; }
+            aside { position: static; height: auto; }
+            main { padding: 24px; }
+        }
+    </style>
+</head>
+<body>
+<div class="layout">
+
+    <aside>
+        <h1>QA Auto Java</h1>
+        <p class="subtitle">Гайд для собеседования (Middle+ / Senior)</p>
+        <div class="search">
+            <input id="search" type="text" placeholder="Поиск по главам..." />
+        </div>
+        <nav>
+            <ul id="toc"></ul>
+        </nav>
+    </aside>
+
+    <main>
+        <div class="topbar">
+            <div class="breadcrumb">
+                <span>QA Auto Java Guide</span>
+                <span class="sep">/</span>
+                <span id="crumb">README</span>
+            </div>
+            <div class="nav-arrows">
+                <button id="prev" title="Предыдущая глава">←</button>
+                <button id="next" title="Следующая глава">→</button>
+            </div>
+        </div>
+        <article id="content"><p class="loader">Загрузка...</p></article>
+    </main>
+</div>
+
+<script>
+    // ---------- Конфиг глав ----------
+    const CHAPTERS = [
+        { id: 'readme', num: '00', file: 'md/README.md',                title: 'Обзор и Roadmap',           pri: null       },
+        { id: 'ch01',   num: '01', file: 'md/01-testing-theory.md',     title: 'Теория тестирования',       pri: 'medium'   },
+        { id: 'ch02',   num: '02', file: 'md/02-java-core.md',          title: 'Java Core',                 pri: 'high'     },
+        { id: 'ch03',   num: '03', file: 'md/03-junit5.md',             title: 'JUnit 5',                   pri: 'high'     },
+        { id: 'ch04',   num: '04', file: 'md/04-maven.md',              title: 'Maven',                     pri: 'medium'   },
+        { id: 'ch05',   num: '05', file: 'md/05-playwright-java.md',    title: 'Playwright Java',           pri: 'critical' },
+        { id: 'ch06',   num: '06', file: 'md/06-rest-assured.md',       title: 'RestAssured',               pri: 'critical' },
+        { id: 'ch07',   num: '07', file: 'md/07-spring-for-qa.md',      title: 'Spring для QA',             pri: 'critical' },
+        { id: 'ch08',   num: '08', file: 'md/08-allure.md',             title: 'Allure Report',             pri: 'medium'   },
+        { id: 'ch09',   num: '09', file: 'md/09-test-architecture.md',  title: 'Архитектура и паттерны',    pri: 'high'     },
+        { id: 'ch10',   num: '10', file: 'md/10-sql.md',                title: 'SQL и БД',                  pri: 'high'     },
+        { id: 'ch11',   num: '11', file: 'md/11-linux-docker-k8s.md',   title: 'Linux / Docker / K8s',      pri: 'medium'   },
+        { id: 'ch12',   num: '12', file: 'md/12-cicd.md',               title: 'CI/CD',                     pri: 'medium'   },
+        { id: 'ch13',   num: '13', file: 'md/13-algorithms.md',         title: 'Алгоритмы',                 pri: 'critical' },
+        { id: 'ch14',   num: '14', file: 'md/14-system-design-qa.md',   title: 'System Design для QA',      pri: 'high'     },
+        { id: 'ch15',   num: '15', file: 'md/15-fintech-specifics.md',  title: 'Fintech-специфика',         pri: 'high'     },
+        { id: 'ch16',   num: '16', file: 'md/16-soft-skills.md',        title: 'Soft skills',               pri: 'medium'   },
+        { id: 'ch17',   num: '17', file: 'md/launch.md',                  title: 'Запуск проекта',             pri: null       },
+    ];
+
+    // ---------- Mermaid init ----------
+    mermaid.initialize({
+        startOnLoad: false,
+        theme: 'dark',
+        themeVariables: {
+            primaryColor: '#1c2030',
+            primaryTextColor: '#d8dee9',
+            primaryBorderColor: '#5cb3ff',
+            lineColor: '#5cb3ff',
+            secondaryColor: '#161922',
+            tertiaryColor: '#0f1115'
+        }
+    });
+
+    // ---------- Marked: рендер с обработкой mermaid ----------
+    const renderer = new marked.Renderer();
+    const origCode = renderer.code.bind(renderer);
+    renderer.code = function (code, lang) {
+        if (lang === 'mermaid') {
+            return `<div class="mermaid">${code}</div>`;
+        }
+        return origCode(code, lang);
+    };
+    marked.setOptions({ renderer, gfm: true, breaks: false });
+
+    // ---------- TOC ----------
+    const tocEl = document.getElementById('toc');
+    CHAPTERS.forEach(ch => {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = `#${ch.id}`;
+        a.dataset.id = ch.id;
+        a.innerHTML = `
+            <span><span class="num">${ch.num}.</span> ${ch.title}</span>
+            ${ch.pri ? `<span class="pri ${ch.pri}">${ch.pri}</span>` : ''}
+        `;
+        li.appendChild(a);
+        tocEl.appendChild(li);
+    });
+
+    // ---------- Загрузка главы ----------
+    const contentEl = document.getElementById('content');
+    const crumbEl = document.getElementById('crumb');
+    const prevBtn = document.getElementById('prev');
+    const nextBtn = document.getElementById('next');
+    let currentIndex = 0;
+
+    async function loadChapter(idx) {
+        if (idx < 0 || idx >= CHAPTERS.length) return;
+        currentIndex = idx;
+        const ch = CHAPTERS[idx];
+
+        // Подсветка активной ссылки
+        document.querySelectorAll('nav a').forEach(a => a.classList.toggle('active', a.dataset.id === ch.id));
+        crumbEl.textContent = `${ch.num}. ${ch.title}`;
+        prevBtn.disabled = idx === 0;
+        nextBtn.disabled = idx === CHAPTERS.length - 1;
+
+        contentEl.innerHTML = '<p class="loader">Загрузка...</p>';
+
+        try {
+            const res = await fetch(ch.file + '?v=' + Date.now());
+            if (!res.ok) {
+                if (res.status === 404) {
+                    contentEl.innerHTML = `
+                        <h1>${ch.num}. ${ch.title}</h1>
+                        <div class="error">
+                            <strong>Глава ещё не написана.</strong><br>
+                            Файл <code>${ch.file}</code> будет создан в процессе наполнения гайда.
+                        </div>
+                    `;
+                    return;
+                }
+                throw new Error('HTTP ' + res.status);
+            }
+            const md = await res.text();
+            const html = marked.parse(md);
+            contentEl.innerHTML = html;
+
+            // Add GitHub-style id to every heading (marked v12 omits them)
+            contentEl.querySelectorAll('h1,h2,h3,h4,h5,h6').forEach(el => {
+                if (!el.id) {
+                    el.id = el.textContent
+                        .toLowerCase()
+                        .trim()
+                        .replace(/\s+/g, '-')
+                        .replace(/[^\w\u00C0-\uFFFF\-]/g, '')
+                        .replace(/-{2,}/g, '-');
+                }
+            });
+
+            // highlight.js
+            contentEl.querySelectorAll('pre code').forEach(block => {
+                hljs.highlightElement(block);
+            });
+
+            // Mermaid render
+            await mermaid.run({ querySelector: '.mermaid' });
+
+            // Scroll: to anchor if present, otherwise to top
+            const anchor = decodeURIComponent(location.hash.slice(1));
+            const target = anchor && !CHAPTERS.find(c => c.id === anchor)
+                ? document.getElementById(anchor)
+                : null;
+            if (target) {
+                target.scrollIntoView({ behavior: 'instant' });
+            } else {
+                window.scrollTo({ top: 0, behavior: 'instant' });
+            }
+        } catch (e) {
+            contentEl.innerHTML = `
+                <div class="error">
+                    <strong>Ошибка загрузки:</strong> ${e.message}<br>
+                    Если открываете <code>file://</code>, браузер блокирует <code>fetch()</code>.<br>
+                    Запустите локальный сервер из директории гайда:<br>
+                    <code>python3 -m http.server 8000</code><br>
+                    и откройте <code>http://localhost:8000/index.html</code>
+                </div>
+            `;
+        }
+    }
+
+    prevBtn.addEventListener('click', () => {
+        if (currentIndex > 0) {
+            location.hash = CHAPTERS[currentIndex - 1].id;
+        }
+    });
+    nextBtn.addEventListener('click', () => {
+        if (currentIndex < CHAPTERS.length - 1) {
+            location.hash = CHAPTERS[currentIndex + 1].id;
+        }
+    });
+
+    function handleHash(isInitial) {
+        const id = (location.hash || '#readme').slice(1);
+        const idx = CHAPTERS.findIndex(c => c.id === id);
+        if (idx >= 0) {
+            loadChapter(idx);
+        } else if (isInitial) {
+            loadChapter(0);
+        } else if (id) {
+            // In-page anchor: scroll to element
+            const el = document.getElementById(decodeURIComponent(id));
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+    window.addEventListener('hashchange', () => handleHash(false));
+
+    // ---------- Поиск (фильтр по заголовкам глав) ----------
+    document.getElementById('search').addEventListener('input', (e) => {
+        const q = e.target.value.trim().toLowerCase();
+        document.querySelectorAll('nav li').forEach((li, i) => {
+            const c = CHAPTERS[i];
+            const match = !q || c.title.toLowerCase().includes(q) || c.num.includes(q);
+            li.style.display = match ? '' : 'none';
+        });
+    });
+
+    // ---------- Старт ----------
+    handleHash(true);
+</script>
+</body>
+</html>
