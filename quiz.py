@@ -2,20 +2,15 @@
 """
 QA Interview Quiz — интерактивный тренажёр по гайду qa-interview-guide.
 
-Режим Claude API (по умолчанию):
-    export ANTHROPIC_API_KEY=sk-ant-...
+Запуск (локальная LLM через Ollama):
     python3 quiz.py
+    python3 quiz.py --model qwen2.5:3b
+    python3 quiz.py --ollama-url http://localhost:11434
 
-Режим локальной LLM (Ollama):
-    python3 quiz.py --local
-    python3 quiz.py --local --model qwen2.5:3b
-    python3 quiz.py --local --ollama-url http://localhost:11434
-
-Режим локальной LLM внутри Docker Compose (сеть docker):
-    python3 quiz.py --local --ollama-url http://ollama:11434
+Внутри Docker Compose (сеть docker):
+    python3 quiz.py --ollama-url http://ollama:11434
 """
 
-import os
 import re
 import sys
 import json
@@ -135,32 +130,6 @@ def _parse_json(raw: str) -> Dict:
     return json.loads(raw)
 
 
-def make_anthropic_caller(model: str = "claude-haiku-4-5-20251001") -> Callable:
-    from anthropic import Anthropic
-    api_key = os.environ.get("ANTHROPIC_API_KEY")
-    if not api_key:
-        print(f"\n{RED}Ошибка: ANTHROPIC_API_KEY не задан.{RESET}")
-        print(f"Запустите: {CYAN}export ANTHROPIC_API_KEY=sk-ant-...{RESET}")
-        print(f"Или используйте локальный режим: {CYAN}python3 quiz.py --local{RESET}")
-        sys.exit(1)
-    client = Anthropic(api_key=api_key)
-
-    def call(question: str, content: str, user_answer: str) -> Dict:
-        msg = EVAL_TEMPLATE.format(
-            question=question, content=content[:1500], user_answer=user_answer
-        )
-        response = client.messages.create(
-            model=model,
-            max_tokens=900,
-            temperature=0,
-            system=SYSTEM_PROMPT,
-            messages=[{"role": "user", "content": msg}],
-        )
-        return _parse_json(response.content[0].text)
-
-    return call
-
-
 def make_ollama_caller(model: str, ollama_url: str) -> Callable:
     try:
         from openai import OpenAI
@@ -261,12 +230,8 @@ def parse_args() -> argparse.Namespace:
         description="QA Interview Quiz — тренажёр собеседований"
     )
     parser.add_argument(
-        "--local", action="store_true",
-        help="Использовать локальную LLM через Ollama вместо Claude API",
-    )
-    parser.add_argument(
         "--model", default=None,
-        help="Модель. Claude: 'claude-haiku-4-5-20251001'. Ollama: 'qwen2.5:7b' (default для --local)",
+        help="Модель Ollama (default: qwen2.5:7b)",
     )
     parser.add_argument(
         "--ollama-url", default="http://localhost:11434",
@@ -283,14 +248,9 @@ def main():
     print(f"\n{BOLD}{CYAN}{hr('━')}{RESET}")
     print(f"{BOLD}{CYAN}   QA Interview Quiz — тренажёр собеседований{RESET}")
 
-    if args.local:
-        model = args.model or "qwen2.5:7b"
-        print(f"{BOLD}{CYAN}   Режим: локальная LLM  │  {model}  │  {args.ollama_url}{RESET}")
-        llm = make_ollama_caller(model, args.ollama_url)
-    else:
-        model = args.model or "claude-haiku-4-5-20251001"
-        print(f"{BOLD}{CYAN}   Режим: Claude API  │  {model}{RESET}")
-        llm = make_anthropic_caller(model)
+    model = args.model or "qwen2.5:7b"
+    print(f"{BOLD}{CYAN}   Режим: локальная LLM  │  {model}  │  {args.ollama_url}{RESET}")
+    llm = make_ollama_caller(model, args.ollama_url)
 
     print(f"{BOLD}{CYAN}{hr('━')}{RESET}")
 

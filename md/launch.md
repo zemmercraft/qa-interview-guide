@@ -24,7 +24,7 @@
 **1. Скачать проект**
 
 ```bash
-git clone <repo-url> qa-interview-guide
+git clone https://github.com/zemmercraft/qa-interview-guide.git qa-interview-guide
 cd qa-interview-guide
 ```
 
@@ -94,15 +94,11 @@ ollama pull qwen2.5:7b
 **4. Запустить квиз**
 
 ```bash
-# Локальная LLM (Ollama)
-python3 quiz.py --local
+# Запуск (по умолчанию qwen2.5:7b)
+python3 quiz.py
 
 # Альтернативная модель (быстрее, меньше RAM)
-python3 quiz.py --local --model qwen2.5:3b
-
-# Claude API (требует ключ)
-export ANTHROPIC_API_KEY=sk-ant-...
-python3 quiz.py
+python3 quiz.py --model qwen2.5:3b
 ```
 
 ---
@@ -123,26 +119,21 @@ python3 quiz.py
 ```
 python3 quiz.py [опции]
 
-  --local                 Использовать Ollama вместо Claude API
-  --model MODEL           Модель (default: qwen2.5:7b для --local,
-                                   claude-haiku-4-5-20251001 для API)
+  --model MODEL           Модель Ollama (default: qwen2.5:7b)
   --ollama-url URL        URL Ollama (default: http://localhost:11434)
 ```
 
 **Примеры:**
 
 ```bash
-# Ollama на localhost
-python3 quiz.py --local
+# Запуск с моделью по умолчанию
+python3 quiz.py
 
 # Ollama на другом хосте
-python3 quiz.py --local --ollama-url http://192.168.1.10:11434
+python3 quiz.py --ollama-url http://192.168.1.10:11434
 
 # Конкретная модель
-python3 quiz.py --local --model mistral:7b
-
-# Claude API с нестандартной моделью
-python3 quiz.py --model claude-sonnet-4-6
+python3 quiz.py --model mistral:7b
 ```
 
 ---
