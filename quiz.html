@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QA Quiz — тренажёр собеседований</title>
+    <style>
+        :root {
+            --bg: #0f1115;
+            --panel: #161922;
+            --panel-2: #1c2030;
+            --border: #2a2f3e;
+            --text: #d8dee9;
+            --text-dim: #8b93a7;
+            --accent: #5cb3ff;
+            --critical: #ff6b6b;
+            --green: #4ec994;
+            --yellow: #ffd580;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+            font-size: 15px;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            background: var(--panel);
+            border-bottom: 1px solid var(--border);
+            padding: 14px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .topbar h1 { font-size: 16px; font-weight: 600; }
+        .topbar a { color: var(--accent); text-decoration: none; font-size: 13px; }
+        .topbar a:hover { text-decoration: underline; }
+
+        .container { max-width: 760px; margin: 0 auto; padding: 48px 24px; }
+
+        .screen { display: none; }
+        .screen.active { display: block; }
+
+        /* ── Buttons ── */
+        .btn {
+            padding: 10px 22px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: opacity 0.15s;
+        }
+        .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .btn:hover:not(:disabled) { opacity: 0.85; }
+        .btn-primary { background: var(--accent); color: #0f1115; }
+        .btn-secondary { background: var(--panel-2); color: var(--text); border: 1px solid var(--border); }
+        .btn-ghost { background: transparent; color: var(--text-dim); border: 1px solid var(--border); }
+        .btn-sm { padding: 7px 16px; font-size: 13px; }
+
+        /* ── Errors ── */
+        .err {
+            background: rgba(255,107,107,.1);
+            border: 1px solid var(--critical);
+            color: var(--critical);
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            margin-bottom: 14px;
+            display: none;
+        }
+        .err.active { display: block; }
+
+        /* ── Setup ── */
+        .setup-title { font-size: 26px; font-weight: 700; margin-bottom: 6px; }
+        .setup-subtitle { color: var(--text-dim); margin-bottom: 32px; }
+
+        .section-label {
+            font-size: 12px; font-weight: 600; color: var(--text-dim);
+            text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px;
+        }
+
+        .chapter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .chapter-chip {
+            display: flex; align-items: center; gap: 8px;
+            padding: 8px 12px; background: var(--panel); border: 1px solid var(--border);
+            border-radius: 6px; cursor: pointer; font-size: 13px; color: var(--text);
+            user-select: none; transition: border-color 0.15s, background 0.15s;
+        }
+        .chapter-chip:hover { background: var(--panel-2); }
+        .chapter-chip.selected { border-color: var(--accent); background: rgba(92,179,255,.08); color: var(--accent); }
+        .chapter-chip input { display: none; }
+        .chapter-chip .num { font-size: 11px; color: var(--text-dim); }
+
+        .config-row { display: flex; gap: 12px; margin: 20px 0 24px; }
+        .config-field { flex: 1; }
+        .config-field label { display: block; font-size: 12px; color: var(--text-dim); margin-bottom: 6px; }
+        .config-field input {
+            width: 100%; padding: 8px 12px; background: var(--panel);
+            border: 1px solid var(--border); border-radius: 6px;
+            color: var(--text); font-size: 13px; outline: none;
+        }
+        .config-field input:focus { border-color: var(--accent); }
+
+        /* ── Quiz ── */
+        .quiz-meta {
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 13px; color: var(--text-dim); margin-bottom: 16px;
+        }
+
+        .progress-bar { height: 3px; background: var(--border); border-radius: 2px; margin-bottom: 28px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.4s; }
+
+        .quiz-question { font-size: 20px; font-weight: 700; line-height: 1.45; margin-bottom: 24px; }
+
+        textarea.quiz-input {
+            width: 100%; min-height: 160px; padding: 14px 16px;
+            background: var(--panel); border: 1px solid var(--border); border-radius: 8px;
+            color: var(--text); font-size: 14px; font-family: inherit;
+            line-height: 1.6; resize: vertical; outline: none; margin-bottom: 14px;
+        }
+        textarea.quiz-input:focus { border-color: var(--accent); }
+
+        .quiz-actions { display: flex; gap: 10px; align-items: center; }
+        .quiz-hint { font-size: 12px; color: var(--text-dim); margin-top: 8px; }
+
+        /* ── Evaluating ── */
+        .eval-center {
+            text-align: center;
+            padding: 80px 0;
+        }
+
+        .spinner {
+            width: 48px; height: 48px;
+            border: 3px solid var(--border); border-top-color: var(--accent);
+            border-radius: 50%; animation: spin 0.8s linear infinite;
+            margin: 0 auto 24px;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .eval-title { font-size: 20px; font-weight: 600; margin-bottom: 8px; }
+        .eval-sub { color: var(--text-dim); font-size: 14px; margin-bottom: 32px; }
+
+        .eval-progress-bar { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; margin-bottom: 12px; }
+        .eval-progress-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.5s; }
+        .eval-progress-label { font-size: 13px; color: var(--text-dim); }
+
+        /* ── Results ── */
+        .results-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid var(--border);
+        }
+
+        .results-score { font-size: 36px; font-weight: 800; }
+        .results-score-sub { font-size: 14px; color: var(--text-dim); margin-top: 2px; }
+        .results-verdict { font-size: 18px; font-weight: 600; text-align: right; }
+
+        .result-card {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+
+        .result-card-header {
+            display: flex; align-items: flex-start; gap: 14px;
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .score-pill {
+            flex-shrink: 0;
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 15px; font-weight: 800;
+            margin-top: 1px;
+        }
+        .score-pill.s3 { background: rgba(78,201,148,.15); color: var(--green); }
+        .score-pill.s2 { background: rgba(92,179,255,.15); color: var(--accent); }
+        .score-pill.s1 { background: rgba(255,213,128,.15); color: var(--yellow); }
+        .score-pill.s0 { background: rgba(255,107,107,.15); color: var(--critical); }
+
+        .result-card-question { font-size: 15px; font-weight: 600; flex: 1; line-height: 1.4; }
+
+        .verdict-badge {
+            flex-shrink: 0;
+            font-size: 12px; font-weight: 700;
+            padding: 3px 10px; border-radius: 20px;
+        }
+        .verdict-badge.s3 { background: rgba(78,201,148,.15); color: var(--green); }
+        .verdict-badge.s2 { background: rgba(92,179,255,.15); color: var(--accent); }
+        .verdict-badge.s1 { background: rgba(255,213,128,.15); color: var(--yellow); }
+        .verdict-badge.s0 { background: rgba(255,107,107,.15); color: var(--critical); }
+
+        .result-card-body { padding: 16px 18px; display: flex; flex-direction: column; gap: 14px; }
+
+        .answer-block-label {
+            font-size: 11px; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 0.06em; margin-bottom: 6px;
+        }
+        .answer-block-label.dim { color: var(--text-dim); }
+        .answer-block-label.accent { color: var(--accent); }
+
+        .answer-text {
+            background: var(--panel-2); border-radius: 6px;
+            padding: 12px 14px; font-size: 13px; line-height: 1.7;
+            color: var(--text); white-space: pre-wrap;
+        }
+
+        .results-actions { display: flex; gap: 10px; margin-top: 28px; }
+
+        /* ── Summary ── */
+        .summary { text-align: center; padding: 56px 0 40px; }
+        .summary-pct { font-size: 72px; font-weight: 800; line-height: 1; margin-bottom: 10px; }
+        .summary-detail { font-size: 16px; color: var(--text-dim); margin-bottom: 8px; }
+        .summary-label { font-size: 18px; margin-bottom: 36px; }
+
+        @media (max-width: 600px) {
+            .config-row { flex-direction: column; }
+            .quiz-actions { flex-wrap: wrap; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="topbar">
+    <h1>QA Interview Quiz</h1>
+    <a href="index.html">← Вернуться к гайду</a>
+</div>
+
+<div class="container">
+
+    <!-- Setup -->
+    <div class="screen active" id="screen-setup">
+        <div class="setup-title">Тренажёр собеседований</div>
+        <p class="setup-subtitle">Выберите главы и начните тренировку</p>
+
+        <div class="section-label">Главы</div>
+        <button class="btn btn-ghost btn-sm" id="btn-toggle-all" style="margin-bottom:12px">Снять все</button>
+        <div class="chapter-grid" id="chapter-grid"></div>
+
+        <div class="config-row">
+            <div class="config-field">
+                <label>Ollama URL</label>
+                <input id="cfg-url" type="text" value="http://localhost:11434">
+            </div>
+            <div class="config-field">
+                <label>Модель</label>
+                <input id="cfg-model" type="text" value="qwen2.5:3b">
+            </div>
+        </div>
+
+        <div class="err" id="err-setup"></div>
+        <button class="btn btn-primary" id="btn-start">Начать тренировку →</button>
+    </div>
+
+    <!-- Quiz -->
+    <div class="screen" id="screen-quiz">
+        <div class="quiz-meta">
+            <span id="quiz-meta"></span>
+            <span style="font-size:13px;color:var(--text-dim)" id="quiz-answered"></span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+        <div class="quiz-question" id="quiz-question"></div>
+        <textarea class="quiz-input" id="quiz-input" placeholder="Введите ответ..."></textarea>
+        <div class="quiz-actions">
+            <button class="btn btn-primary" id="btn-next">Далее →</button>
+            <button class="btn btn-secondary" id="btn-skip">Пропустить</button>
+            <button class="btn btn-ghost" id="btn-finish" style="margin-left:auto">Завершить и проверить</button>
+        </div>
+        <p class="quiz-hint">Ctrl+Enter — следующий вопрос</p>
+    </div>
+
+    <!-- Evaluating -->
+    <div class="screen" id="screen-evaluating">
+        <div class="eval-center">
+            <div class="spinner"></div>
+            <div class="eval-title">Проверяю ответы...</div>
+            <div class="eval-sub" id="eval-sub">Подготовка</div>
+            <div style="max-width:360px;margin:0 auto">
+                <div class="eval-progress-bar">
+                    <div class="eval-progress-fill" id="eval-progress-fill" style="width:0%"></div>
+                </div>
+                <div class="eval-progress-label" id="eval-progress-label"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results -->
+    <div class="screen" id="screen-results">
+        <div class="results-header">
+            <div>
+                <div class="results-score" id="results-score"></div>
+                <div class="results-score-sub" id="results-score-sub"></div>
+            </div>
+            <div class="results-verdict" id="results-verdict"></div>
+        </div>
+
+        <div id="results-list"></div>
+
+        <div class="results-actions">
+            <button class="btn btn-primary" id="btn-restart">Начать заново</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+const CHAPTERS = [
+    { num: '01', file: 'md/01-testing-theory.md',    title: 'Теория тестирования'    },
+    { num: '02', file: 'md/02-java-core.md',         title: 'Java Core'              },
+    { num: '03', file: 'md/03-junit5.md',            title: 'JUnit 5'                },
+    { num: '04', file: 'md/04-maven.md',             title: 'Maven'                  },
+    { num: '05', file: 'md/05-playwright-java.md',   title: 'Playwright Java'        },
+    { num: '06', file: 'md/06-rest-assured.md',      title: 'RestAssured'            },
+    { num: '07', file: 'md/07-spring-for-qa.md',     title: 'Spring для QA'          },
+    { num: '08', file: 'md/08-allure.md',            title: 'Allure Report'          },
+    { num: '09', file: 'md/09-test-architecture.md', title: 'Архитектура и паттерны' },
+    { num: '10', file: 'md/10-sql.md',               title: 'SQL и БД'               },
+    { num: '11', file: 'md/11-linux-docker-k8s.md',  title: 'Linux / Docker / K8s'   },
+    { num: '12', file: 'md/12-cicd.md',              title: 'CI/CD'                  },
+    { num: '13', file: 'md/13-algorithms.md',        title: 'Алгоритмы'              },
+    { num: '14', file: 'md/14-system-design-qa.md',  title: 'System Design для QA'   },
+    { num: '15', file: 'md/15-fintech-specifics.md', title: 'Fintech-специфика'      },
+    { num: '16', file: 'md/16-soft-skills.md',       title: 'Soft skills'            },
+];
+
+const SYSTEM_PROMPT =
+    "You are a strict but fair QA interview coach evaluating a candidate's answer. " +
+    "Respond ONLY with valid JSON — no markdown fences, no extra text.";
+
+// Used when pre-generated reference answer is available (shorter, faster)
+const EVAL_TEMPLATE_REF =
+    "Question: {question}\n\n" +
+    "Reference answer:\n{reference_answer}\n\n" +
+    "Candidate's answer:\n{user_answer}\n\n" +
+    "Evaluate and respond with this exact JSON structure:\n" +
+    '{\n' +
+    '  "score": <integer 0-3>,\n' +
+    '  "verdict": "<one of: Отлично|Хорошо|Частично|Неверно>",\n' +
+    '  "correct_points": ["things the candidate got right"],\n' +
+    '  "missing_points": ["important things missing or stated incorrectly"]\n' +
+    '}\n\n' +
+    "Score: 3=complete and accurate, 2=mostly correct but missing details, 1=partial or confused, 0=wrong/blank.";
+
+// Fallback when no pre-generated answer exists
+const EVAL_TEMPLATE_FULL =
+    "Question asked in the interview: {question}\n\n" +
+    "Key points from the study guide (reference material):\n{content}\n\n" +
+    "Candidate's answer:\n{user_answer}\n\n" +
+    "Evaluate and respond with this exact JSON structure:\n" +
+    '{\n' +
+    '  "score": <integer 0-3>,\n' +
+    '  "verdict": "<one of: Отлично|Хорошо|Частично|Неверно>",\n' +
+    '  "correct_points": ["list of things the candidate got right"],\n' +
+    '  "missing_points": ["important things missing or stated incorrectly"],\n' +
+    '  "model_answer": "correct answer in Russian, concise, 3-6 sentences with key facts"\n' +
+    '}\n\n' +
+    "Score: 3=complete and accurate, 2=mostly correct but missing details, 1=partial or confused, 0=wrong/blank.";
+
+// ── State ──
+let questions = [], currentIdx = 0;
+let answers = []; // {question, content, num, userAnswer, referenceAnswer}
+let refAnswers = {}; // question text → pre-generated reference answer
+let ollamaUrl = 'http://localhost:11434', modelName = 'qwen2.5:3b';
+
+// ── Question parsing ──
+const Q_RE = /^### (?:Q\d+[a-z]?|Вопрос \d+)\. (.+)$/gm;
+
+function stripMd(text) {
+    return text
+        .replace(/```[\s\S]*?```/g, '[code example]')
+        .replace(/`([^`]+)`/g, '$1')
+        .replace(/^\s*#{1,6}\s+/gm, '')
+        .replace(/\*{1,2}([^*]+)\*{1,2}/g, '$1')
+        .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1')
+        .replace(/^\s*[-|>]\s*/gm, '')
+        .replace(/\n{3,}/g, '\n\n')
+        .trim();
+}
+
+function parseQuestions(text, num) {
+    return [...text.matchAll(Q_RE)].map((m, i, arr) => {
+        const question = m[1].trim();
+        if (question.length < 8) return null;
+        const start = m.index + m[0].length;
+        const end = i + 1 < arr.length ? arr[i + 1].index : text.length;
+        return { question, content: stripMd(text.slice(start, end).trim()).slice(0, 2000), num };
+    }).filter(Boolean);
+}
+
+async function loadQuestions(selected) {
+    const all = [];
+    for (const ch of CHAPTERS) {
+        if (!selected.includes(ch.num)) continue;
+        try {
+            const res = await fetch(ch.file + '?t=' + Date.now());
+            if (res.ok) all.push(...parseQuestions(await res.text(), ch.num));
+        } catch {}
+    }
+    for (let i = all.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [all[i], all[j]] = [all[j], all[i]];
+    }
+    return all;
+}
+
+// ── Ollama ──
+async function evaluate(question, content, userAnswer, referenceAnswer) {
+    let msg;
+    if (referenceAnswer) {
+        msg = EVAL_TEMPLATE_REF
+            .replace('{question}', question)
+            .replace('{reference_answer}', referenceAnswer)
+            .replace('{user_answer}', userAnswer);
+    } else {
+        msg = EVAL_TEMPLATE_FULL
+            .replace('{question}', question)
+            .replace('{content}', content.slice(0, 1500))
+            .replace('{user_answer}', userAnswer);
+    }
+
+    const res = await fetch(`${ollamaUrl}/v1/chat/completions`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            model: modelName,
+            max_tokens: referenceAnswer ? 500 : 900,
+            temperature: 0,
+            messages: [
+                { role: 'system', content: SYSTEM_PROMPT },
+                { role: 'user', content: msg },
+            ],
+        }),
+    });
+    if (!res.ok) throw new Error(`Ollama HTTP ${res.status}`);
+    const data = await res.json();
+    const raw = data.choices[0].message.content.replace(/^```(?:json)?\n?|\n?```$/g, '').trim();
+    return JSON.parse(raw);
+}
+
+// ── UI ──
+const $ = id => document.getElementById(id);
+
+function escHtml(str) {
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+}
+
+function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    $(id).classList.add('active');
+}
+
+function showErr(id, msg) { const e = $(id); e.textContent = msg; e.classList.add('active'); }
+function hideErr(id) { $(id).classList.remove('active'); }
+
+function chapterTitle(num) {
+    return (CHAPTERS.find(c => c.num === num) || {}).title || num;
+}
+
+// ── Chapter chips ──
+const grid = $('chapter-grid');
+CHAPTERS.forEach(ch => {
+    const label = document.createElement('label');
+    label.className = 'chapter-chip selected';
+    label.innerHTML =
+        `<input type="checkbox" value="${ch.num}" checked>` +
+        `<span class="num">${ch.num}.</span><span>${ch.title}</span>`;
+    label.querySelector('input').addEventListener('change', e => {
+        label.classList.toggle('selected', e.target.checked);
+    });
+    grid.appendChild(label);
+});
+
+$('btn-toggle-all').addEventListener('click', () => {
+    const chips = grid.querySelectorAll('.chapter-chip');
+    const allOn = [...chips].every(c => c.querySelector('input').checked);
+    chips.forEach(c => {
+        c.querySelector('input').checked = !allOn;
+        c.classList.toggle('selected', !allOn);
+    });
+    $('btn-toggle-all').textContent = allOn ? 'Выбрать все' : 'Снять все';
+});
+
+// ── Start ──
+$('btn-start').addEventListener('click', async () => {
+    hideErr('err-setup');
+    const selected = [...grid.querySelectorAll('input:checked')].map(i => i.value);
+    if (!selected.length) { showErr('err-setup', 'Выберите хотя бы одну главу.'); return; }
+
+    ollamaUrl = $('cfg-url').value.trim().replace(/\/$/, '');
+    modelName = $('cfg-model').value.trim();
+
+    $('btn-start').disabled = true;
+    $('btn-start').textContent = 'Загрузка...';
+    [questions] = await Promise.all([
+        loadQuestions(selected),
+        fetch('md/answers.json?t=' + Date.now())
+            .then(r => r.ok ? r.json() : {})
+            .then(d => { refAnswers = d; })
+            .catch(() => {}),
+    ]);
+    $('btn-start').disabled = false;
+    $('btn-start').textContent = 'Начать тренировку →';
+
+    if (!questions.length) {
+        showErr('err-setup', 'Вопросы не найдены. Проверьте наличие .md файлов.');
+        return;
+    }
+
+    currentIdx = 0;
+    answers = [];
+    showScreen('screen-quiz');
+    renderQuestion();
+});
+
+// ── Quiz ──
+function renderQuestion() {
+    const q = questions[currentIdx];
+    const pct = Math.round(currentIdx / questions.length * 100);
+    $('progress-fill').style.width = pct + '%';
+    $('quiz-meta').textContent = `Глава: ${chapterTitle(q.num)} │ ${currentIdx + 1} / ${questions.length}`;
+    $('quiz-answered').textContent = `Отвечено: ${answers.length}`;
+    $('quiz-question').textContent = q.question;
+    $('quiz-input').value = '';
+    $('quiz-input').focus();
+}
+
+function nextQuestion(userAnswer) {
+    if (userAnswer) {
+        const q = questions[currentIdx];
+        answers.push({
+            question: q.question,
+            content: q.content,
+            num: q.num,
+            userAnswer,
+            referenceAnswer: refAnswers[q.question] || null,
+        });
+    }
+    currentIdx++;
+    if (currentIdx >= questions.length) {
+        startEvaluation();
+    } else {
+        renderQuestion();
+    }
+}
+
+$('btn-next').addEventListener('click', () => {
+    const answer = $('quiz-input').value.trim();
+    nextQuestion(answer || null);
+});
+
+$('btn-skip').addEventListener('click', () => nextQuestion(null));
+
+$('btn-finish').addEventListener('click', () => {
+    const answer = $('quiz-input').value.trim();
+    if (answer) {
+        const q = questions[currentIdx];
+        answers.push({
+            question: q.question,
+            content: q.content,
+            num: q.num,
+            userAnswer: answer,
+            referenceAnswer: refAnswers[q.question] || null,
+        });
+    }
+    startEvaluation();
+});
+
+$('quiz-input').addEventListener('keydown', e => {
+    if (e.ctrlKey && e.key === 'Enter') {
+        const answer = $('quiz-input').value.trim();
+        nextQuestion(answer || null);
+    }
+});
+
+// ── Evaluation ──
+async function startEvaluation() {
+    if (!answers.length) {
+        showScreen('screen-setup');
+        return;
+    }
+
+    showScreen('screen-evaluating');
+    const results = [];
+
+    for (let i = 0; i < answers.length; i++) {
+        const a = answers[i];
+        $('eval-sub').textContent = `${a.question.slice(0, 60)}…`;
+        $('eval-progress-fill').style.width = Math.round(i / answers.length * 100) + '%';
+        $('eval-progress-label').textContent = `${i + 1} из ${answers.length}`;
+
+        try {
+            const result = await evaluate(a.question, a.content, a.userAnswer, a.referenceAnswer);
+            results.push({ ...a, result });
+        } catch (e) {
+            results.push({ ...a, result: { score: 0, verdict: 'Ошибка', correct_points: [], missing_points: [], model_answer: `Ошибка: ${e.message}` } });
+        }
+    }
+
+    $('eval-progress-fill').style.width = '100%';
+    $('eval-progress-label').textContent = `${answers.length} из ${answers.length}`;
+
+    showResults(results);
+}
+
+// ── Results ──
+function showResults(results) {
+    const total = results.reduce((s, r) => s + (r.result.score ?? 0), 0);
+    const max = results.length * 3;
+    const pct = Math.round(total / max * 100);
+    const color = pct >= 80 ? 'var(--green)' : pct >= 50 ? 'var(--yellow)' : 'var(--critical)';
+    const verdict = pct >= 80 ? 'Отличная подготовка!' : pct >= 50 ? 'Есть пробелы — повтори слабые темы.' : 'Нужно больше практики.';
+
+    $('results-score').textContent = `${pct}%`;
+    $('results-score').style.color = color;
+    $('results-score-sub').textContent = `${total} из ${max} баллов · ${results.length} вопросов`;
+    $('results-verdict').textContent = verdict;
+    $('results-verdict').style.color = color;
+
+    const list = $('results-list');
+    list.innerHTML = '';
+
+    results.forEach((a) => {
+        const r = a.result;
+        const score = r.score ?? 0;
+
+        const card = document.createElement('div');
+        card.className = 'result-card';
+        card.innerHTML = `
+            <div class="result-card-header">
+                <div class="score-pill s${score}">${score}</div>
+                <div class="result-card-question">${escHtml(a.question)}</div>
+                <div class="verdict-badge s${score}">${r.verdict || ''}</div>
+            </div>
+            <div class="result-card-body">
+                <div>
+                    <div class="answer-block-label dim">Ваш ответ</div>
+                    <div class="answer-text">${escHtml(a.userAnswer)}</div>
+                </div>
+                <div>
+                    <div class="answer-block-label accent">Эталонный ответ</div>
+                    <div class="answer-text">${escHtml(a.referenceAnswer || r.model_answer || '—')}</div>
+                </div>
+            </div>`;
+
+        list.appendChild(card);
+    });
+
+    showScreen('screen-results');
+}
+
+$('btn-restart').addEventListener('click', () => {
+    answers = [];
+    currentIdx = 0;
+    showScreen('screen-setup');
+});
+</script>
+</body>
+</html>
