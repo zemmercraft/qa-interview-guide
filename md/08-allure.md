@@ -23,7 +23,7 @@
 
 ## Часть 1. Что такое Allure и зачем он нужен
 
-### Q1. Что такое Allure Report
+### Q1. Что такое Allure Report?
 
 **Allure** — open-source фреймворк для генерации интерактивных отчётов о тестах. Состоит из:
 
@@ -47,7 +47,7 @@ flowchart LR
 
 ---
 
-### Q2. Allure vs ExtentReport vs ReportPortal
+### Q2. В чём разница между Allure, ExtentReport и ReportPortal?
 
 | Критерий            | Allure              | ExtentReport         | ReportPortal             |
 | ------------------- | ------------------- | -------------------- | ------------------------ |
@@ -65,7 +65,7 @@ flowchart LR
 
 ## Часть 2. Подключение к Maven + JUnit 5
 
-### Q3. Минимальный pom.xml
+### Q3. Что такое минимальный pom.xml?
 
 ```xml
 <properties>
@@ -123,7 +123,7 @@ flowchart LR
 
 ---
 
-### Q4. Команды генерации отчёта
+### Q4. Что такое команды генерации отчёта?
 
 ```bash
 # 1. Прогнать тесты — создаются target/allure-results/*.json
@@ -144,7 +144,7 @@ allure serve target/allure-results
 
 ---
 
-### Q5. Установка Allure CLI
+### Q5. Что такое установка Allure CLI?
 
 ```bash
 # macOS
@@ -171,7 +171,7 @@ allure --version
 
 ## Часть 3. Аннотации и метаданные
 
-### Q6. Базовые аннотации
+### Q6. Какие базовые аннотации нужно знать?
 
 ```java
 import io.qameta.allure.*;
@@ -210,7 +210,7 @@ Epic
 
 ---
 
-### Q7. Severity — уровни
+### Q7. Что такое Severity?
 
 ```java
 @Severity(SeverityLevel.BLOCKER)    // фича не работает в принципе
@@ -224,7 +224,7 @@ Epic
 
 ---
 
-### Q8. Issue, TmsLink, Link
+### Q8. Что такое Issue, TmsLink, Link и зачем это нужно?
 
 ```java
 @Issue("BUG-1234")                 // активный баг (отображается красным)
@@ -242,7 +242,7 @@ allure.link.tms.pattern=https://tms.bank.ru/case/{}
 
 ---
 
-### Q9. @Owner и @Lead
+### Q9. Для чего используется @Owner и @Lead?
 
 ```java
 @Owner("alex.smith")       // ответственный за тест
@@ -255,7 +255,7 @@ allure.link.tms.pattern=https://tms.bank.ru/case/{}
 
 ## Часть 4. Шаги (steps) и attachments
 
-### Q10. @Step — деление теста на читаемые шаги
+### Q10. Для чего используется @Step?
 
 ```java
 @Test
@@ -292,7 +292,7 @@ public void assertOrderStatus(String orderId, String expectedStatus) {
 
 ---
 
-### Q11. Allure.step(...) — программные шаги
+### Q11. Что такое Allure.step(...)?
 
 Альтернатива аннотации — лямбда:
 
@@ -322,7 +322,7 @@ void test() {
 
 ---
 
-### Q12. @Attachment — прикрепить файл/строку к отчёту
+### Q12. Для чего используется @Attachment?
 
 ```java
 @Attachment(value = "Screenshot", type = "image/png")
@@ -351,7 +351,7 @@ Allure.addAttachment("response.json", "application/json", responseBody);
 
 ---
 
-### Q13. Скриншот при падении (Playwright + JUnit 5 Extension)
+### Q13. Что такое скриншот при падении (Playwright + JUnit 5 Extension)?
 
 ```java
 public class ScreenshotOnFailureExtension implements TestWatcher {
@@ -384,7 +384,7 @@ class LoginTest { /* ... */ }
 
 ---
 
-### Q14. @Description vs @DisplayName
+### Q14. В чём разница между @Description и @DisplayName?
 
 ```java
 @Test
@@ -404,7 +404,7 @@ void login() { }
 
 ## Часть 5. Интеграции
 
-### Q15. Allure + RestAssured
+### Q15. Что такое Allure + RestAssured и зачем это нужно?
 
 ```xml
 <dependency>
@@ -431,7 +431,7 @@ RequestSpecification spec = new RequestSpecBuilder()
 
 ---
 
-### Q16. Allure + Playwright
+### Q16. Что такое Allure + Playwright и зачем это нужно?
 
 Готового адаптера нет, но интеграция простая через **Extensions**:
 
@@ -468,7 +468,7 @@ public class AllurePlaywrightExtension implements
 
 ---
 
-### Q17. Allure environment
+### Q17. Что такое Allure environment и зачем это нужно?
 
 `allure-results/environment.properties` — общая информация о среде прогона:
 
@@ -498,7 +498,7 @@ static void writeEnv() {
 
 ---
 
-### Q18. Allure executors — связь с CI
+### Q18. Что такое Allure executors?
 
 `allure-results/executor.json`:
 
@@ -521,7 +521,7 @@ static void writeEnv() {
 
 ## Часть 6. История, тренды, категории
 
-### Q19. История прогонов
+### Q19. Что такое история прогонов?
 
 `allure-results/history/` — папка с предыдущим прогоном. Если положить в неё файлы из старого `allure-report/history/`, новый отчёт покажет:
 
@@ -542,7 +542,7 @@ allure generate target/allure-results -o target/allure-report --clean
 
 ---
 
-### Q20. Categories — классификация ошибок
+### Q20. Что такое Categories?
 
 `src/test/resources/categories.json`:
 
@@ -578,7 +578,7 @@ allure generate target/allure-results -o target/allure-report --clean
 
 ---
 
-### Q21. Behaviors / Suites / Packages — представления
+### Q21. Что такое Behaviors / Suites / Packages?
 
 В Allure есть несколько группировок:
 
@@ -593,7 +593,7 @@ allure generate target/allure-results -o target/allure-report --clean
 
 ## Часть 7. Allure в CI/CD
 
-### Q22. GitLab CI пример
+### Q22. Что такое gitLab CI пример?
 
 ```yaml
 stages:
@@ -640,7 +640,7 @@ deploy:
 
 ---
 
-### Q23. Jenkins плагин
+### Q23. Что такое jenkins плагин?
 
 Установить **Allure Jenkins Plugin**, в Jenkinsfile:
 
@@ -662,7 +662,7 @@ post {
 
 ---
 
-### Q24. GitHub Actions
+### Q24. Что такое GitHub Actions и зачем это нужно?
 
 ```yaml
 - name: Run tests
@@ -689,7 +689,7 @@ post {
 
 ## Часть 8. Allure TestOps — кратко
 
-### Q25. Allure Report vs Allure TestOps
+### Q25. В чём разница между Allure Report и Allure TestOps?
 
 | Критерий           | Allure Report (free)            | Allure TestOps (commercial)         |
 | ------------------ | ------------------------------- | ------------------------------------ |

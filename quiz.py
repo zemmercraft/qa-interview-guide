@@ -30,6 +30,7 @@ DIM    = "\033[2m"
 RESET  = "\033[0m"
 
 GUIDE_DIR = Path(__file__).parent / "md"
+ANSWERS_FILE = GUIDE_DIR / "answers.json"
 
 CHAPTERS = [
     ("01", "Теория тестирования"),
@@ -85,6 +86,12 @@ def parse_questions(md_path: Path) -> List[Dict]:
             "chapter_id": md_path.stem[:2],
         })
     return questions
+
+
+def load_answers() -> Dict:
+    if ANSWERS_FILE.exists():
+        return json.loads(ANSWERS_FILE.read_text(encoding="utf-8"))
+    return {}
 
 
 def load_questions(chapter_filter: Optional[List[str]] = None) -> List[Dict]:
@@ -248,12 +255,13 @@ def main():
     print(f"\n{BOLD}{CYAN}{hr('━')}{RESET}")
     print(f"{BOLD}{CYAN}   QA Interview Quiz — тренажёр собеседований{RESET}")
 
-    model = args.model or "qwen2.5:7b"
+    model = args.model or "qwen2.5:3b"
     print(f"{BOLD}{CYAN}   Режим: локальная LLM  │  {model}  │  {args.ollama_url}{RESET}")
     llm = make_ollama_caller(model, args.ollama_url)
 
     print(f"{BOLD}{CYAN}{hr('━')}{RESET}")
 
+    answers = load_answers()
     chapter_filter = chapter_menu()
     questions = load_questions(chapter_filter)
 
@@ -282,7 +290,8 @@ def main():
         print(f"\n{DIM}Оцениваю...{RESET}", end="", flush=True)
 
         try:
-            result = llm(q["question"], q["content"], user_answer)
+            reference = answers.get(q["question"]) or q["content"]
+            result = llm(q["question"], reference, user_answer)
         except Exception as e:
             print(f"\r{RED}Ошибка оценки: {e}{RESET}")
             continue

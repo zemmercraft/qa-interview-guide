@@ -58,7 +58,7 @@ flowchart LR
 
 ---
 
-### Q2. Архитектура Playwright: Playwright → Browser → BrowserContext → Page
+### Q2. Какова архитектура Playwright: Playwright → Browser → BrowserContext → Page?
 
 ```mermaid
 flowchart TB
@@ -99,7 +99,7 @@ flowchart TB
 
 ---
 
-### Q4. Sync vs async API в Playwright Java
+### Q4. В чём разница между Sync и async API в Playwright Java?
 
 В Java Playwright предоставляет **синхронный API** (под капотом — асинхронный, обёрнутый в блокирующие вызовы). Для QA это удобнее: код читается линейно, не нужны Future/CompletableFuture.
 
@@ -152,7 +152,7 @@ mvn exec:java -e -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="in
 
 ---
 
-### Q6. Минимальный тест на Playwright + JUnit 5
+### Q6. Что такое минимальный тест на Playwright + JUnit 5?
 
 ```java
 import com.microsoft.playwright.*;
@@ -201,7 +201,7 @@ class SmokeTest {
 
 ---
 
-### Q7. Headless / headed / slowMo / channel
+### Q7. В чём разница между Headless, headed, slowMo и channel?
 
 ```java
 BrowserType.LaunchOptions opts = new BrowserType.LaunchOptions()
@@ -272,7 +272,7 @@ btn.click();   // resolve + click заново — DOM мог изменитьс
 
 ---
 
-### Q10. Какие виды локаторов рекомендует Playwright? (Locator API)
+### Q10. Какие виды локаторов рекомендует Playwright? (Locator API)?
 
 Playwright продвигает **user-facing locators** — поиск как ищет пользователь, а не по `xpath`/`css`.
 
@@ -351,7 +351,7 @@ page.locator(".form").locator("input[name=email]");
 
 ---
 
-### Q12. Базовые действия (click, fill, type, press, hover)
+### Q12. Какие базовые действия (click, fill, type, press, hover) нужно знать?
 
 ```java
 page.click("button.submit");
@@ -376,7 +376,7 @@ page.click("button.submit", new Page.ClickOptions()
 
 ---
 
-### Q13. Работа с iframe
+### Q13. Что такое работа с iframe?
 
 ```java
 FrameLocator frame = page.frameLocator("iframe#payment");
@@ -388,7 +388,7 @@ frame.getByRole(AriaRole.BUTTON, new FrameLocator.GetByRoleOptions().setName("Pa
 
 ---
 
-### Q14. Загрузка и скачивание файлов
+### Q14. Что такое загрузка и скачивание файлов?
 
 **Upload:**
 ```java
@@ -411,7 +411,7 @@ download.saveAs(Paths.get("target/exports/" + download.suggestedFilename()));
 
 ---
 
-### Q15. Работа с диалогами (alert, confirm, prompt)
+### Q15. Что такое работа с диалогами (alert, confirm, prompt)?
 
 ```java
 page.onceDialog(dialog -> {
@@ -446,7 +446,7 @@ page.click("button#showAlert");
 
 ---
 
-### Q17. PlaywrightAssertions — встроенные ожидающие assertions
+### Q17. Что такое PlaywrightAssertions?
 
 ```java
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
@@ -470,7 +470,7 @@ assertThat(page.locator("li")).containsText("Active");
 
 ---
 
-### Q18. Ручные ожидания: waitFor*, waitForLoadState, waitForURL
+### Q18. Что такое Ручные ожидания?
 
 Иногда auto-wait недостаточен:
 
@@ -505,7 +505,7 @@ page.waitForFunction("() => window.dataLayer && window.dataLayer.length > 0");
 
 ---
 
-### Q19. Управление таймаутами
+### Q19. Что такое управление таймаутами?
 
 ```java
 // Глобально: для page actions
@@ -525,7 +525,7 @@ assertThat(page.locator(".result")).hasText("Done",
 
 ## Часть 5. Network: мокинг, перехват, авторизация
 
-### Q20. route() — перехват и мокинг запросов
+### Q20. Что такое route()?
 
 ```java
 // Стабнуть API
@@ -563,7 +563,7 @@ page.route("**/api/products", route -> {
 
 ---
 
-### Q21. APIRequestContext — Playwright как HTTP-клиент
+### Q21. Что такое APIRequestContext?
 
 Playwright умеет делать **прямые HTTP-запросы** в обход UI — удобно для пред-условий теста (создать пользователя через API, потом тестировать UI).
 
@@ -585,7 +585,7 @@ long id = body.getAsJsonObject().get("id").getAsLong();
 
 ---
 
-### Q22. Storage state — авторизация без логина в каждом тесте
+### Q22. Что такое Storage state?
 
 **Идея:** один раз залогинились, сохранили cookies + localStorage в файл, дальше переиспользуем.
 
@@ -621,7 +621,7 @@ void newCtx() {
 
 ---
 
-### Q23. WebSocket-тестирование
+### Q23. Что такое webSocket-тестирование?
 
 ```java
 page.onWebSocket(ws -> {
@@ -635,7 +635,7 @@ page.onWebSocket(ws -> {
 
 ## Часть 6. Trace, video, screenshots, debug
 
-### Q24. Trace Viewer — главная киллер-фича Playwright
+### Q24. Что такое Trace Viewer?
 
 **Trace** — zip-архив с DOM-снапшотами, скриншотами, логами действий, network-запросами по каждому шагу.
 
@@ -672,7 +672,7 @@ flowchart LR
 
 ---
 
-### Q25. Записать trace только при падении (паттерн)
+### Q25. Что такое записать trace только при падении (паттерн)?
 
 ```java
 @BeforeEach
@@ -708,7 +708,7 @@ public class TraceOnFailureExtension implements TestWatcher {
 
 ---
 
-### Q26. Видеозапись тестов
+### Q26. Что такое видеозапись тестов?
 
 ```java
 context = browser.newContext(new Browser.NewContextOptions()
@@ -725,7 +725,7 @@ Path videoPath = page.video().path();
 
 ---
 
-### Q27. Скриншоты
+### Q27. Что такое скриншоты?
 
 ```java
 // Полный скриншот
@@ -743,7 +743,7 @@ byte[] bytes = page.screenshot();
 
 ---
 
-### Q28. Codegen — запись действий в код
+### Q28. Что такое Codegen?
 
 Запустить рекордер:
 ```bash
@@ -759,7 +759,7 @@ mvn exec:java -e -D exec.mainClass=com.microsoft.playwright.CLI \
 
 ---
 
-### Q29. PWDEBUG и Inspector
+### Q29. Что такое pWDEBUG и Inspector?
 
 ```bash
 PWDEBUG=1 mvn test -Dtest=LoginTest
@@ -798,7 +798,7 @@ junit.jupiter.execution.parallel.config.fixed.parallelism = 4
 
 ---
 
-### Q31. Thread-safety: Playwright и Browser — НЕ thread-safe
+### Q31. Что такое Thread-safety: Playwright и Browser?
 
 **Правило:** один `Playwright` и один `Browser` могут жить в нескольких потоках, **но `Page` и `BrowserContext` — нет**. На поток должен быть **свой Page**.
 
@@ -834,7 +834,7 @@ public class PlaywrightHolder {
 
 ---
 
-### Q32. Полный набор JUnit 5 + Playwright (рекомендуемый паттерн с Extension)
+### Q32. Что такое полный набор JUnit 5 + Playwright (рекомендуемый паттерн с Extension)?
 
 ```java
 public class PlaywrightExtension implements
@@ -902,7 +902,7 @@ class LoginTest {
 
 ---
 
-### Q33. Запуск в Docker / CI
+### Q33. Что такое запуск в Docker / CI?
 
 **Официальный образ:**
 ```dockerfile
@@ -934,7 +934,7 @@ ui-tests:
 
 ## Часть 8. Page Object и архитектура
 
-### Q34. Page Object на Playwright Java — современный стиль
+### Q34. Что такое Page Object на Playwright Java и чем он лучше альтернатив?
 
 Playwright Java НЕ требует `@FindBy` (как в Selenium PageFactory). Локаторы — обычные поля.
 
@@ -983,7 +983,7 @@ public class LoginPage {
 
 ---
 
-### Q35. Stick to "actions and assertions" — методы PageObject
+### Q35. Что такое Stick to "actions and assertions"?
 
 **Антипаттерн:** PageObject выставляет наружу `Locator` или `WebElement`-подобные сущности.
 

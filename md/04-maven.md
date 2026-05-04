@@ -22,7 +22,7 @@
 
 ## Часть 1. Что такое Maven и pom.xml
 
-### Q1. Maven vs Gradle — кратко
+### Q1. В чём разница между Maven и Gradle?
 
 | Критерий            | Maven                          | Gradle                                 |
 | ------------------- | ------------------------------ | -------------------------------------- |
@@ -36,7 +36,7 @@
 
 ---
 
-### Q2. Что такое pom.xml
+### Q2. Что такое pom.xml?
 
 **POM (Project Object Model)** — описание проекта: координаты, зависимости, плагины, свойства, профили.
 
@@ -86,7 +86,7 @@
 
 ## Часть 2. Структура проекта и координаты
 
-### Q3. Стандартная структура Maven-проекта
+### Q3. Что такое стандартная структура Maven-проекта?
 
 ```
 my-project/
@@ -110,7 +110,7 @@ my-project/
 
 ---
 
-### Q4. GAV — координаты артефакта
+### Q4. Что такое GAV?
 
 **G**roup **A**rtifact **V**ersion — уникальный идентификатор в репозитории.
 
@@ -127,7 +127,7 @@ groupId:artifactId:version[:classifier][:packaging]
 
 ---
 
-### Q5. SNAPSHOT vs Release versions
+### Q5. В чём разница между SNAPSHOT и Release versions?
 
 | Тип        | Пример              | Поведение                               |
 | ---------- | ------------------- | --------------------------------------- |
@@ -138,7 +138,7 @@ groupId:artifactId:version[:classifier][:packaging]
 
 ---
 
-### Q6. Локальный и удалённый репозитории
+### Q6. Что такое локальный и удалённый репозитории?
 
 ```mermaid
 flowchart LR
@@ -180,7 +180,7 @@ flowchart LR
 
 ## Часть 3. Lifecycle, phases, goals
 
-### Q7. Three lifecycles
+### Q7. Что такое Three lifecycles и зачем это нужно?
 
 Maven имеет 3 встроенных жизненных цикла:
 
@@ -192,7 +192,7 @@ Maven имеет 3 встроенных жизненных цикла:
 
 ---
 
-### Q8. Phases default lifecycle
+### Q8. Что такое Phases default lifecycle и зачем это нужно?
 
 ```mermaid
 flowchart LR
@@ -225,7 +225,7 @@ mvn verify     # выполнит всё до verify (включая test и pac
 
 ---
 
-### Q9. Goals — задачи плагинов
+### Q9. Что такое Goals?
 
 Каждый плагин предоставляет **goals**. Goals привязаны к phases.
 
@@ -239,7 +239,7 @@ mvn versions:display-dependency-updates
 
 ---
 
-### Q10. Связь phase ↔ goal — packaging
+### Q10. Что такое Связь phase ↔ goal?
 
 Какой goal привязан к phase зависит от `<packaging>`. Для `jar`:
 
@@ -254,7 +254,7 @@ mvn versions:display-dependency-updates
 
 ---
 
-### Q11. Полезные команды Maven
+### Q11. Что такое полезные команды Maven?
 
 ```bash
 mvn clean                       # удалить target/
@@ -292,7 +292,7 @@ mvn versions:display-plugin-updates
 
 ## Часть 4. Зависимости и dependency management
 
-### Q12. Dependency scopes
+### Q12. Что такое Dependency scopes и зачем это нужно?
 
 ```xml
 <dependency>
@@ -324,7 +324,7 @@ mvn versions:display-plugin-updates
 
 ---
 
-### Q13. Транзитивные зависимости и conflict resolution
+### Q13. Что такое транзитивные зависимости и conflict resolution?
 
 Если ваша библиотека зависит от `lib-x:1.0`, а другая от `lib-x:2.0` — Maven выбирает по правилам:
 
@@ -341,7 +341,7 @@ mvn dependency:tree -Dverbose
 
 ---
 
-### Q14. Exclusions — как исключить транзитивную зависимость
+### Q14. Что такое Exclusions?
 
 ```xml
 <dependency>
@@ -360,7 +360,7 @@ mvn dependency:tree -Dverbose
 
 ---
 
-### Q15. dependencyManagement — централизация версий
+### Q15. Что такое dependencyManagement?
 
 В **родительском POM** или в текущем — задать версии один раз для всех модулей / зависимостей:
 
@@ -396,7 +396,7 @@ mvn dependency:tree -Dverbose
 
 ---
 
-### Q16. multi-module проекты
+### Q16. Что такое multi-module проекты?
 
 ```
 parent/
@@ -429,7 +429,7 @@ parent/
 
 ## Часть 5. Surefire и Failsafe для тестов
 
-### Q17. Surefire vs Failsafe — разница
+### Q17. В чём разница между Surefire и Failsafe?
 
 | Plugin       | Phase             | Дефолтные include-маски                    | Поведение при падении       |
 | ------------ | ----------------- | ------------------------------------------ | --------------------------- |
@@ -440,7 +440,7 @@ parent/
 
 ---
 
-### Q18. Surefire — конфигурация для JUnit 5
+### Q18. Что такое Surefire?
 
 ```xml
 <plugin>
@@ -489,7 +489,7 @@ parent/
 
 ---
 
-### Q19. Failsafe — конфигурация
+### Q19. Что такое Failsafe?
 
 ```xml
 <plugin>
@@ -524,7 +524,7 @@ mvn verify     # запустит unit (Surefire) + IT (Failsafe)
 
 ---
 
-### Q20. Параллельные тесты в Surefire
+### Q20. Что такое параллельные тесты в Surefire?
 
 **Уровни параллелизма:**
 
@@ -553,7 +553,7 @@ mvn verify     # запустит unit (Surefire) + IT (Failsafe)
 
 ## Часть 6. Профили и параметризация
 
-### Q21. Maven профили
+### Q21. Что такое maven профили?
 
 **Profile** — набор настроек, активируемый условно. Используется для разных сред / разных режимов запуска.
 
@@ -608,7 +608,7 @@ mvn test -Pstage,smoke     # несколько
 
 ---
 
-### Q22. System properties и -D
+### Q22. Что такое system properties и -D?
 
 Передать значение в тесты через JVM property:
 
@@ -630,7 +630,7 @@ String url = System.getProperty("api.url", "https://default");
 
 ---
 
-### Q23. Environment variables
+### Q23. Что такое Environment variables и зачем это нужно?
 
 ```bash
 export API_TOKEN="xyz"
@@ -653,7 +653,7 @@ String token = System.getenv("API_TOKEN");
 
 ## Часть 7. Полезные плагины
 
-### Q24. maven-compiler-plugin
+### Q24. Что такое maven-compiler-plugin и зачем это нужно?
 
 ```xml
 <plugin>
@@ -671,7 +671,7 @@ String token = System.getenv("API_TOKEN");
 
 ---
 
-### Q25. allure-maven-plugin
+### Q25. Что такое allure-maven-plugin и зачем это нужно?
 
 ```xml
 <plugin>
@@ -695,7 +695,7 @@ mvn allure:serve              # сгенерировать + запустить 
 
 ---
 
-### Q26. exec-maven-plugin — Playwright codegen / install
+### Q26. В чём разница между exec-maven-plugin — Playwright codegen и install?
 
 ```bash
 # Установить браузеры
@@ -711,7 +711,7 @@ mvn exec:java -e -D exec.mainClass=com.microsoft.playwright.CLI \
 
 ---
 
-### Q27. versions-maven-plugin — обновление зависимостей
+### Q27. Что такое versions-maven-plugin?
 
 ```bash
 # Какие версии устарели
@@ -726,7 +726,7 @@ mvn versions:use-latest-versions
 
 ---
 
-### Q28. maven-enforcer-plugin — гарантии в команде
+### Q28. Что такое maven-enforcer-plugin?
 
 ```xml
 <plugin>
@@ -755,7 +755,7 @@ mvn versions:use-latest-versions
 
 ---
 
-### Q29. maven-shade-plugin — uber-jar для CLI-тестов
+### Q29. Что такое maven-shade-plugin?
 
 Создаёт «толстый» JAR со всеми зависимостями внутри. Используется редко в QA, но полезно для публикации Java-инструментов.
 

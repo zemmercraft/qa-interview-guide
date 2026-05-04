@@ -75,7 +75,7 @@ public class OrderService {
 
 ---
 
-### Q3. Что такое Spring-контейнер? BeanFactory vs ApplicationContext
+### Q3. Что такое Spring-контейнер? BeanFactory vs ApplicationContext?
 
 **Контейнер** — это объект, отвечающий за создание, конфигурацию и хранение бинов.
 
@@ -506,7 +506,7 @@ mvn test -Dspring.profiles.active=stage
 
 ---
 
-### Q16. Жизненный цикл Spring Boot приложения
+### Q16. Как выглядит жизненный цикл Spring Boot приложения?
 
 ```mermaid
 sequenceDiagram
@@ -552,7 +552,7 @@ void apiIsHealthy() {
 
 ---
 
-### Q18. SpringApplication.run vs @SpringBootTest
+### Q18. В чём разница между SpringApplication.run и @SpringBootTest?
 
 | Способ                          | Когда                                          | Что делает                                       |
 | ------------------------------- | ---------------------------------------------- | ------------------------------------------------ |
@@ -625,7 +625,7 @@ class OrderApiIT {
 
 ---
 
-### Q21. Test slices — что это? @WebMvcTest, @DataJpaTest, @JsonTest
+### Q21. Что такое Test slices?
 
 **Slice-тест** поднимает **только часть** контекста, нужную для одного слоя. Быстрее, чем `@SpringBootTest`.
 
@@ -661,7 +661,7 @@ class OrderControllerTest {
 
 ---
 
-### Q22. @MockBean vs @SpyBean
+### Q22. В чём разница между @MockBean и @SpyBean?
 
 Обе из `spring-boot-test`. Заменяют **бин в контексте** на mock/spy Mockito.
 
@@ -748,7 +748,7 @@ class DangerousTest { }
 
 ---
 
-### Q25. @TestConfiguration vs @Configuration в тесте
+### Q25. В чём разница между @TestConfiguration и @Configuration в тесте?
 
 **`@Configuration` в `src/test/java`** — обычный конфиг, **подхватывается auto-scan** так же, как из `main`. Может перебить production-bean неожиданно.
 
@@ -772,7 +772,7 @@ class OrderApiIT {
 
 ---
 
-### Q26. @ActiveProfiles в тестах
+### Q26. Для чего используется @ActiveProfiles в тестах?
 
 Активирует один или несколько профилей **только для теста**:
 
@@ -790,7 +790,7 @@ class OrderApiTest { }
 
 ---
 
-### Q27. Как переопределить properties в тесте
+### Q27. Как переопределить properties в тесте?
 
 **Вариант 1: `@TestPropertySource`** — точечно, в одном тестовом классе.
 ```java
@@ -828,7 +828,7 @@ class DbIT {
 
 ---
 
-### Q28. TestRestTemplate vs WebTestClient vs MockMvc
+### Q28. В чём разница между TestRestTemplate, WebTestClient и MockMvc?
 
 | Инструмент       | Что тестирует                       | Сетевой вызов | Когда использовать                            |
 | ---------------- | ----------------------------------- | ------------- | --------------------------------------------- |
@@ -875,7 +875,7 @@ vs `@WebMvcTest` — когда нужен **полный контекст**, н
 
 ---
 
-### Q30. @Transactional в тестах — польза и подводные камни
+### Q30. Для чего используется @Transactional в тестах?
 
 **Польза:** каждый тест в своей транзакции, откатывается в конце → БД чистая.
 
@@ -905,7 +905,7 @@ class OrderRepoTest {
 
 ---
 
-### Q31. ContextHierarchy и @ContextConfiguration
+### Q31. Что такое contextHierarchy и @ContextConfiguration?
 
 `@ContextConfiguration` — низкоуровневая аннотация (используется в Spring без Boot или для тонкой настройки).
 
@@ -950,7 +950,7 @@ flowchart TB
 
 ---
 
-### Q33. Spring + Testcontainers
+### Q33. Что такое Spring + Testcontainers и зачем это нужно?
 
 Testcontainers — библиотека, поднимающая Docker-контейнеры (БД, Kafka, Redis) на время тестов.
 
@@ -982,7 +982,7 @@ class OrderRepoIT {
 
 ## Часть 4. Spring в автотест-фреймворке (практика)
 
-### Q34. Зачем нужен Spring в автотестах? Реальные кейсы
+### Q34. Зачем нужен Spring в автотестах? Реальные кейсы?
 
 | Кейс                                                  | Как помогает Spring                                                       |
 | ----------------------------------------------------- | ------------------------------------------------------------------------- |
@@ -998,7 +998,7 @@ class OrderRepoIT {
 
 ---
 
-### Q35. Spring Boot Test для API-тестов: пример с RestAssured
+### Q35. Что такое Spring Boot Test для API-тестов?
 
 **Структура:**
 ```
@@ -1172,7 +1172,7 @@ class LoginTest {
 
 ---
 
-### Q37. Spring profile для разных сред (dev, stage, prod) в автотестах
+### Q37. Что такое spring profile для разных сред (dev, stage, prod) в автотестах?
 
 **Структура `src/test/resources`:**
 ```
@@ -1205,7 +1205,7 @@ test:stage:
 
 ---
 
-### Q38. Inject properties в тесты
+### Q38. Что такое inject properties в тесты?
 
 **Вариант 1 — `@Value`:**
 ```java
@@ -1232,7 +1232,7 @@ class StubBackendTest { }
 
 ---
 
-### Q39. Создание API-клиентов как @Bean
+### Q39. Что такое создание API-клиентов как @Bean?
 
 **Преимущество:** один клиент = один `@Bean` со всей нужной обвязкой (filters, baseURI, auth). Тестам не нужно знать ничего о конфигурации.
 
@@ -1261,7 +1261,7 @@ OrdersApi ordersApi(ApiProperties p) {
 
 ---
 
-### Q40. Конкурентные тесты + Spring (thread-safety)
+### Q40. Что такое конкурентные тесты + Spring (thread-safety)?
 
 JUnit 5 умеет запускать тесты параллельно (см. главу 03). При этом Spring-контекст один на все потоки → **синглтонные бины должны быть thread-safe**.
 
@@ -1284,7 +1284,7 @@ public class TestContext {
 
 ---
 
-### Q41. Типичные ошибки и антипаттерны при использовании Spring в автотестах
+### Q41. Что такое типичные ошибки и антипаттерны при использовании Spring в автотестах?
 
 | Антипаттерн                                                 | Почему плохо                              | Как правильно                                        |
 | ----------------------------------------------------------- | ----------------------------------------- | ---------------------------------------------------- |

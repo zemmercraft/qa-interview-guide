@@ -16,6 +16,8 @@ services:
       - "11434:11434"
     volumes:
       - ollama_data:/root/.ollama
+    environment:
+      - OLLAMA_ORIGINS=http://localhost:8000
     restart: unless-stopped
 
   # Квиз в интерактивном режиме (запускать вручную: docker compose run --rm quiz)
