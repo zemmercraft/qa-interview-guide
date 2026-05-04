@@ -23,7 +23,7 @@
 
 ## Часть 1. ООП и базовые концепции
 
-### Q1. Четыре принципа ООП
+### Q1. Что такое четыре принципа ООП?
 
 | Принцип            | Суть                                                  | Пример Java                                       |
 | ------------------ | ----------------------------------------------------- | ------------------------------------------------- |
@@ -42,7 +42,7 @@
 
 ---
 
-### Q2. Класс vs интерфейс vs абстрактный класс
+### Q2. В чём разница между класс, интерфейс и абстрактный класс?
 
 | Критерий                  | Класс                  | Абстрактный класс       | Интерфейс                              |
 | ------------------------- | ---------------------- | ----------------------- | -------------------------------------- |
@@ -61,7 +61,7 @@
 
 ---
 
-### Q3. Полиморфизм — статический vs динамический
+### Q3. Что такое Полиморфизм и в чём разница между его видами: статический и динамический?
 
 **Static (compile-time)** — overloading: разные методы с одним именем, разные параметры.
 ```java
@@ -83,7 +83,7 @@ a.sound(); // "woof" — на runtime по реальному классу
 
 ---
 
-### Q4. final, static, abstract — ключевые модификаторы
+### Q4. Что такое final, static, abstract?
 
 ```java
 // final — нельзя переопределить / переприсвоить
@@ -106,7 +106,7 @@ abstract class Shape { abstract double area(); }
 
 ---
 
-### Q5. Перегрузка vs переопределение — правила
+### Q5. В чём разница между перегрузка и переопределение?
 
 **Overloading (перегрузка):** одно имя, разные параметры.
 - Возвращаемый тип НЕ участвует в выборе
@@ -133,7 +133,7 @@ class B extends A {
 
 ## Часть 2. Equals / hashCode / immutable / records
 
-### Q6. Контракт equals и hashCode
+### Q6. Что такое контракт equals и hashCode?
 
 **Контракт `equals`:**
 1. **Рефлексивность:** `x.equals(x)` → true
@@ -152,7 +152,7 @@ class B extends A {
 
 ---
 
-### Q7. Современные equals/hashCode
+### Q7. Что такое современные equals/hashCode?
 
 ```java
 // Старый стиль (если используешь IDE-генератор):
@@ -179,7 +179,7 @@ public record User(long id, String email) { }
 
 ---
 
-### Q8. Что такое immutable объект и зачем
+### Q8. Что такое immutable объект и зачем?
 
 **Immutable** — поля окончательны после конструктора, объект не меняется.
 
@@ -203,7 +203,7 @@ public record User(long id, String email) { }
 
 ---
 
-### Q9. Records — что нужно знать (Java 16+)
+### Q9. Что такое Records?
 
 ```java
 public record User(long id, String email, List<String> roles) {
@@ -234,7 +234,7 @@ public record User(long id, String email, List<String> roles) {
 
 ---
 
-### Q10. == vs equals для строк
+### Q10. В чём разница между == и equals для строк?
 
 ```java
 String a = "hello";
@@ -254,7 +254,7 @@ a.equals(c) // true
 
 ## Часть 3. Исключения
 
-### Q11. Иерархия исключений
+### Q11. Что такое иерархия исключений?
 
 ```mermaid
 flowchart TD
@@ -277,7 +277,7 @@ flowchart TD
 
 ---
 
-### Q12. try / catch / finally / try-with-resources
+### Q12. В чём разница между try, catch, finally и try-with-resources?
 
 ```java
 // Классический try-finally
@@ -310,7 +310,7 @@ try { } catch (IOException | SQLException e) { /* общая обработка 
 
 ---
 
-### Q13. Checked vs unchecked — когда что
+### Q13. В чём разница между Checked и unchecked?
 
 **Checked (`throws IOException`)** — клиент **обязан** обработать или пробросить.
 - Спорный концепт. В современной Java тренд — **минимизировать checked**.
@@ -333,7 +333,7 @@ assertThatThrownBy(() -> client.getUser(-1))
 
 ---
 
-### Q14. Кастомные исключения
+### Q14. Что такое кастомные исключения?
 
 ```java
 public class PaymentException extends RuntimeException {
@@ -355,7 +355,7 @@ public class PaymentException extends RuntimeException {
 
 ---
 
-### Q15. Подавление исключений (suppressed exceptions)
+### Q15. Что такое подавление исключений (suppressed exceptions)?
 
 В try-with-resources, если основной блок и `close()` оба бросили исключение — `close()`-исключение **подавляется** и сохраняется в `e.getSuppressed()`:
 
@@ -374,7 +374,7 @@ try {
 
 ## Часть 4. Generics и wildcards
 
-### Q16. Зачем нужны generics
+### Q16. Зачем нужны generics?
 
 **Без generics (до Java 5):**
 ```java
@@ -394,7 +394,7 @@ String s = list.get(0); // type-safe на этапе компиляции
 
 ---
 
-### Q17. Wildcards: `?`, `? extends T`, `? super T`
+### Q17. Что такое wildcards в Java Generics и в чём разница между ?, ? extends T и ? super T?
 
 **PECS — Producer Extends, Consumer Super.**
 
@@ -425,7 +425,7 @@ void printSize(List<?> any) {
 
 ---
 
-### Q18. Bounded type parameters
+### Q18. Что такое Bounded type parameters и зачем это нужно?
 
 ```java
 // T должен быть Number или его наследником
@@ -443,7 +443,7 @@ public static <T extends Comparable<T> & Serializable> T max(List<T> list) {
 
 ---
 
-### Q19. Type erasure — что это и какие последствия
+### Q19. Что такое Type erasure?
 
 В runtime generic-типы стираются: `List<String>` → `List`, `T` → `Object` (или верхняя граница).
 
@@ -466,7 +466,7 @@ parse(jsonStr, User.class);
 
 > Сложности коллекций — см. главу [13. Алгоритмы](./13-algorithms.md), Q4-Q8.
 
-### Q20. List, Set, Map — базовая шпаргалка
+### Q20. Что такое List, Set, Map?
 
 ```mermaid
 flowchart TB
@@ -496,7 +496,7 @@ flowchart TB
 
 ---
 
-### Q21. ArrayList vs LinkedList — когда что
+### Q21. В чём разница между ArrayList и LinkedList?
 
 В **99%** случаев — `ArrayList`. `LinkedList` уступает по скорости из-за плохой cache locality (узлы разбросаны в памяти). Преимущество `LinkedList` — `O(1)` вставка/удаление **по итератору**, но `ArrayDeque` обычно лучше.
 
@@ -519,7 +519,7 @@ flowchart TB
 
 ---
 
-### Q22. HashMap внутри: bucket'ы, treeify, resize
+### Q22. Как устроен HashMap внутри изнутри?
 
 **Алгоритм `put`:**
 1. `hash(key)` — комбинирует `hashCode` со старшими битами для лучшего распределения
@@ -542,7 +542,7 @@ flowchart LR
 
 ---
 
-### Q23. Iterator и ConcurrentModificationException
+### Q23. Что такое iterator и ConcurrentModificationException?
 
 ```java
 List<String> list = new ArrayList<>(List.of("a", "b", "c"));
@@ -562,7 +562,7 @@ list = list.stream().filter(s -> !s.equals("b")).toList();
 
 ---
 
-### Q24. Comparable vs Comparator
+### Q24. В чём разница между Comparable и Comparator?
 
 ```java
 // Comparable — естественный порядок класса
@@ -586,7 +586,7 @@ users.sort(Comparator.comparing(User::email).thenComparingLong(User::id));
 
 ## Часть 6. Stream API и функциональные интерфейсы
 
-### Q25. Functional interfaces — основные
+### Q25. Что такое Functional interfaces?
 
 | Интерфейс            | Сигнатура                  | Пример                                |
 | -------------------- | -------------------------- | ------------------------------------- |
@@ -600,7 +600,7 @@ users.sort(Comparator.comparing(User::email).thenComparingLong(User::id));
 
 ---
 
-### Q26. Method references
+### Q26. Что такое Method references и зачем это нужно?
 
 ```java
 // Static
@@ -619,7 +619,7 @@ Supplier<List<String>> newList = ArrayList::new;
 
 ---
 
-### Q27. Stream API — pipeline
+### Q27. Что такое Stream API?
 
 ```java
 List<String> emails = users.stream()
@@ -636,7 +636,7 @@ List<String> emails = users.stream()
 
 ---
 
-### Q28. Terminal операции — что есть
+### Q28. Что такое Terminal операции?
 
 ```java
 // Сбор в коллекцию
@@ -688,7 +688,7 @@ List<String> emails = users.stream()
 
 ---
 
-### Q29. Stream API — типичные ошибки на собесе
+### Q29. Что такое Stream API?
 
 ```java
 // ❌ Stream нельзя использовать дважды
@@ -710,7 +710,7 @@ list.stream().parallel().filter(...) // когда список 100 элемен
 
 ---
 
-### Q30. Optional
+### Q30. Что такое Optional и зачем это нужно?
 
 ```java
 Optional<User> u = repo.findById(1);
@@ -732,7 +732,7 @@ return null;                            // → не используй null с O
 
 ## Часть 7. Многопоточность (базово)
 
-### Q31. Thread vs Runnable vs Callable
+### Q31. В чём разница между Thread, Runnable и Callable?
 
 ```java
 // Runnable — нет результата, нет throws
@@ -758,7 +758,7 @@ String email = cf.get();
 
 ---
 
-### Q32. synchronized, volatile, atomic
+### Q32. Что такое synchronized, volatile, atomic и зачем это нужно?
 
 **`synchronized`** — мьютекс на объекте/классе. Один поток в блоке, остальные ждут.
 ```java
@@ -790,7 +790,7 @@ counter.compareAndSet(0, 1);
 
 ---
 
-### Q33. ConcurrentHashMap vs synchronized HashMap
+### Q33. В чём разница между ConcurrentHashMap и synchronized HashMap?
 
 ```java
 Map<String, Integer> m1 = Collections.synchronizedMap(new HashMap<>());
@@ -809,7 +809,7 @@ Map<String, Integer> m2 = new ConcurrentHashMap<>();
 
 ---
 
-### Q34. ExecutorService — пулы потоков
+### Q34. Что такое ExecutorService?
 
 ```java
 ExecutorService fixed   = Executors.newFixedThreadPool(4);
@@ -835,7 +835,7 @@ try (ExecutorService es = Executors.newVirtualThreadPerTaskExecutor()) {
 
 ---
 
-### Q35. Race condition / deadlock — концепции
+### Q35. Объясни ключевые концепции Race condition / deadlock?
 
 **Race condition** — результат зависит от того, в каком порядке потоки выполнят операции.
 ```java
@@ -860,7 +860,7 @@ synchronized (b) { synchronized (a) { ... } }
 
 ---
 
-### Q35a. ThreadLocal — изоляция состояния по потоку
+### Q35a. Как работает ThreadLocal?
 
 **Что это:** контейнер, который хранит **отдельное значение для каждого потока**. Поток A и поток B обращаются к одному `ThreadLocal`-объекту, но получают разные значения.
 
@@ -908,7 +908,7 @@ public class DriverHolder {
 
 ## Часть 8. JVM и память (базово)
 
-### Q36. Heap vs Stack vs Metaspace
+### Q36. В чём разница между Heap, Stack и Metaspace?
 
 ```mermaid
 flowchart LR
@@ -929,7 +929,7 @@ flowchart LR
 
 ---
 
-### Q37. Garbage Collection — base concepts
+### Q37. Объясни ключевые концепции Garbage Collection?
 
 **Цель:** освобождать память от объектов, до которых больше нельзя добраться по цепочке ссылок от GC roots (стек, статические поля, JNI).
 
@@ -950,7 +950,7 @@ flowchart LR
 
 ---
 
-### Q38. Утечки памяти в Java
+### Q38. Что такое утечки памяти в Java?
 
 Несмотря на GC, утечки бывают:
 
@@ -977,7 +977,7 @@ Files.newBufferedReader(...); // без try-with-resources
 
 ## Часть 9. Современная Java
 
-### Q39. var (Java 10+)
+### Q39. Что такое var (Java 10+) и зачем это нужно?
 
 ```java
 var list = new ArrayList<String>();   // List<String>
@@ -994,7 +994,7 @@ var lambda = () -> {};   // тип лямбды не выводится
 
 ---
 
-### Q40. Switch expressions, sealed, pattern matching
+### Q40. Что такое Switch expressions, sealed, pattern matching и зачем это нужно?
 
 **Switch expression (Java 14+):**
 ```java
@@ -1031,7 +1031,7 @@ String desc = switch (method) {
 
 ---
 
-### Q41. Text blocks, helpful NPE, records
+### Q41. Что такое Text blocks, helpful NPE, records и зачем это нужно?
 
 ```java
 // Text blocks (Java 15+) — multi-line strings

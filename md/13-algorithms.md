@@ -57,7 +57,7 @@ flowchart LR
 
 ---
 
-### Q2. Best / average / worst case и амортизация
+### Q2. Что такое best / average / worst case и амортизация?
 
 - **Worst case** — Big-O. По умолчанию говорим о нём.
 - **Average case** — обычно та же или лучше.
@@ -70,7 +70,7 @@ HashMap.put() // обычно O(1), но в худшем (все хэши сов
 
 ---
 
-### Q3. Big-O по памяти (Space complexity)
+### Q3. Что такое big-O по памяти (Space complexity)?
 
 Считаем **дополнительную память**, которую алгоритм использует помимо входа.
 
@@ -96,7 +96,7 @@ void traverse(Node n) {
 
 ## Часть 2. Структуры данных и их сложности
 
-### Q4. ArrayList vs LinkedList
+### Q4. В чём разница между ArrayList и LinkedList?
 
 | Операция                | ArrayList   | LinkedList |
 | ----------------------- | ----------- | ---------- |
@@ -111,7 +111,7 @@ void traverse(Node n) {
 
 ---
 
-### Q5. HashMap / HashSet — сложности и устройство
+### Q5. Что такое HashMap / HashSet?
 
 ```java
 HashMap<String, Integer> m = new HashMap<>();
@@ -134,7 +134,7 @@ m.remove("a");    // O(1) average
 
 ---
 
-### Q6. TreeMap, ConcurrentHashMap, LinkedHashMap
+### Q6. Что такое TreeMap, ConcurrentHashMap, LinkedHashMap и зачем это нужно?
 
 | Реализация            | Порядок                  | Сложность get/put     | Когда                          |
 | --------------------- | ------------------------ | --------------------- | ------------------------------ |
@@ -146,7 +146,7 @@ m.remove("a");    // O(1) average
 
 ---
 
-### Q7. Stack, Queue, Deque
+### Q7. Что такое Stack, Queue, Deque и зачем это нужно?
 
 ```java
 // Stack (LIFO) — НЕ Stack-класс! Используем Deque
@@ -176,7 +176,7 @@ pq.poll(); // 1 (min-heap по умолчанию)
 
 ---
 
-### Q8. Шпаргалка по сложностям коллекций Java
+### Q8. Что такое шпаргалка по сложностям коллекций Java?
 
 ```mermaid
 flowchart TB
@@ -204,7 +204,7 @@ flowchart TB
 
 ## Часть 3. Паттерн «массивы и строки»
 
-### Q9. Развернуть строку
+### Q9. Что такое развернуть строку?
 
 ```java
 String reverse(String s) {
@@ -224,7 +224,7 @@ String reverse(String s) {
 
 ---
 
-### Q10. Является ли строка палиндромом
+### Q10. Что такое является ли строка палиндромом?
 
 ```java
 boolean isPalindrome(String s) {
@@ -255,7 +255,7 @@ boolean isPalindromeAlphanum(String s) {
 
 ---
 
-### Q11. Anagram check
+### Q11. Что такое Anagram check и зачем это нужно?
 
 ```java
 // Подход 1: сортировка O(n log n)
@@ -283,7 +283,7 @@ boolean isAnagramCount(String a, String b) {
 
 ---
 
-### Q12. FizzBuzz — классика, не запорь
+### Q12. Объясни FizzBuzz?
 
 ```java
 List<String> fizzBuzz(int n) {
@@ -300,7 +300,7 @@ List<String> fizzBuzz(int n) {
 
 ---
 
-### Q13. Найти максимум / минимум в массиве
+### Q13. Что такое найти максимум / минимум в массиве?
 
 ```java
 int max(int[] arr) {
@@ -316,7 +316,7 @@ int max(int[] arr) {
 
 ---
 
-### Q14. Найти второй максимум
+### Q14. Что такое найти второй максимум?
 
 ```java
 int secondMax(int[] arr) {
@@ -334,7 +334,7 @@ int secondMax(int[] arr) {
 
 ## Часть 4. Паттерн «hash maps / sets»
 
-### Q15. Two Sum (LeetCode 1)
+### Q15. Что такое Two Sum (LeetCode 1) и зачем это нужно?
 
 > Дан массив и target. Вернуть индексы двух чисел, сумма которых равна target.
 
@@ -357,7 +357,7 @@ int[] twoSum(int[] nums, int target) {
 
 ---
 
-### Q16. Содержит ли массив дубликаты
+### Q16. Что такое содержит ли массив дубликаты?
 
 ```java
 boolean containsDuplicate(int[] nums) {
@@ -372,7 +372,7 @@ boolean containsDuplicate(int[] nums) {
 
 ---
 
-### Q17. Первый уникальный символ в строке (LeetCode 387)
+### Q17. Что такое первый уникальный символ в строке (LeetCode 387)?
 
 ```java
 int firstUniqChar(String s) {
@@ -388,7 +388,7 @@ int firstUniqChar(String s) {
 
 ---
 
-### Q18. Сгруппировать анаграммы (LeetCode 49)
+### Q18. Что такое сгруппировать анаграммы (LeetCode 49)?
 
 ```java
 List<List<String>> groupAnagrams(String[] strs) {
@@ -405,7 +405,7 @@ List<List<String>> groupAnagrams(String[] strs) {
 
 ---
 
-### Q19. Подсчёт частот (классика)
+### Q19. Что такое подсчёт частот (классика)?
 
 ```java
 Map<String, Long> wordFrequency(List<String> words) {
@@ -439,7 +439,7 @@ List<Map.Entry<String, Long>> topN(Map<String, Long> freq, int n) {
 
 ---
 
-### Q21. Two Sum II — отсортированный массив
+### Q21. Что такое Two Sum II?
 
 ```java
 int[] twoSumSorted(int[] arr, int target) {
@@ -457,7 +457,7 @@ int[] twoSumSorted(int[] arr, int target) {
 
 ---
 
-### Q22. Удалить дубликаты из отсортированного массива «in-place» (LeetCode 26)
+### Q22. Что такое удалить дубликаты из отсортированного массива «in-place» (LeetCode 26)?
 
 ```java
 int removeDuplicates(int[] nums) {
@@ -476,7 +476,7 @@ int removeDuplicates(int[] nums) {
 
 ---
 
-### Q23. Слить два отсортированных массива (LeetCode 88)
+### Q23. Что такое слить два отсортированных массива (LeetCode 88)?
 
 ```java
 void merge(int[] nums1, int m, int[] nums2, int n) {
@@ -504,7 +504,7 @@ void merge(int[] nums1, int m, int[] nums2, int n) {
 
 ---
 
-### Q25. Самая длинная подстрока без повторов (LeetCode 3)
+### Q25. Что такое самая длинная подстрока без повторов (LeetCode 3)?
 
 ```java
 int lengthOfLongestSubstring(String s) {
@@ -525,7 +525,7 @@ int lengthOfLongestSubstring(String s) {
 
 ---
 
-### Q26. Минимальный подмассив с суммой ≥ S (LeetCode 209)
+### Q26. Что такое минимальный подмассив с суммой ≥ S (LeetCode 209)?
 
 ```java
 int minSubArrayLen(int s, int[] nums) {
@@ -546,7 +546,7 @@ int minSubArrayLen(int s, int[] nums) {
 
 ## Часть 7. Сортировки и бинарный поиск
 
-### Q27. Сортировки — что должен знать QA Auto
+### Q27. Что такое Сортировки?
 
 | Сортировка        | Time avg / worst    | Space  | Stable | Когда обсуждают                         |
 | ----------------- | ------------------- | ------ | ------ | --------------------------------------- |
@@ -566,7 +566,7 @@ int minSubArrayLen(int s, int[] nums) {
 
 ---
 
-### Q28. Quick Sort — реализация
+### Q28. Что такое Quick Sort?
 
 ```java
 void quickSort(int[] arr, int l, int r) {
@@ -589,7 +589,7 @@ void quickSort(int[] arr, int l, int r) {
 
 ---
 
-### Q29. Merge Sort — реализация
+### Q29. Что такое Merge Sort?
 
 ```java
 void mergeSort(int[] a) { mergeSort(a, 0, a.length - 1); }
@@ -617,7 +617,7 @@ void merge(int[] a, int l, int m, int r) {
 
 ---
 
-### Q30. Бинарный поиск — must-have
+### Q30. Объясни Бинарный поиск?
 
 ```java
 int binarySearch(int[] arr, int target) {
@@ -639,7 +639,7 @@ int binarySearch(int[] arr, int target) {
 
 ---
 
-### Q31. Бинарный поиск с поворотом / в произвольной задаче
+### Q31. Что такое бинарный поиск с поворотом / в произвольной задаче?
 
 **Шаблон поиска левой границы:**
 ```java
@@ -660,7 +660,7 @@ int firstTrue(int lo, int hi, IntPredicate p) {
 
 ## Часть 8. Рекурсия и базовые деревья
 
-### Q32. Факториал — рекурсия и мемоизация
+### Q32. Что такое Факториал?
 
 ```java
 long factorial(int n) {
@@ -681,7 +681,7 @@ long factorialIter(int n) {
 
 ---
 
-### Q33. Фибоначчи — наивно vs DP
+### Q33. Что такое Фибоначчи и в чём разница между его видами: наивно и DP?
 
 ```java
 // Наивно — O(2ⁿ), огромный стек
@@ -712,7 +712,7 @@ int fibIter(int n) {
 
 ---
 
-### Q34. Бинарное дерево — обходы
+### Q34. Что такое Бинарное дерево?
 
 ```java
 class TreeNode {
@@ -768,7 +768,7 @@ List<List<Integer>> levelOrder(TreeNode root) {
 
 ---
 
-### Q35. Глубина бинарного дерева (LeetCode 104)
+### Q35. Что такое глубина бинарного дерева (LeetCode 104)?
 
 ```java
 int maxDepth(TreeNode root) {
@@ -782,7 +782,7 @@ int maxDepth(TreeNode root) {
 
 ## Часть 9. Стратегия live-coding на собесе
 
-### Q36. Алгоритм решения задачи на интервью
+### Q36. Что такое алгоритм решения задачи на интервью?
 
 ```mermaid
 flowchart TD
@@ -802,7 +802,7 @@ flowchart TD
 
 ---
 
-### Q37. Что говорить вслух
+### Q37. Что говорить вслух?
 
 1. **Уточни задачу:** «Массив отсортирован?», «Можно ли иметь дубликаты?», «Что вернуть, если решений несколько?»
 2. **Приведи пример:** «Допустим, `[2, 7, 11, 15], target=9` → `[0, 1]`. Правильно понимаю?»
@@ -815,7 +815,7 @@ flowchart TD
 
 ---
 
-### Q38. Чего НЕ делать
+### Q38. Чего НЕ делать?
 
 - ❌ Молча писать код 15 минут
 - ❌ Сразу прыгать в код без обсуждения
@@ -827,7 +827,7 @@ flowchart TD
 
 ---
 
-### Q39. QA Auto-специфика на live-coding
+### Q39. Что такое qA Auto-специфика на live-coding?
 
 В РФ-продуктовых компаниях для QA Auto дают:
 - Easy/Medium **типовые алгоритмы** (Two Sum, Reverse, Anagram, Sliding Window)
@@ -842,7 +842,7 @@ flowchart TD
 
 ---
 
-### Q40. План тренировок (4 недели до собеса)
+### Q40. Что такое план тренировок (4 недели до собеса)?
 
 ```mermaid
 gantt

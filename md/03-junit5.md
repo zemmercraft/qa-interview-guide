@@ -23,7 +23,7 @@
 
 ## Часть 1. Архитектура и базовые аннотации
 
-### Q1. Из чего состоит JUnit 5
+### Q1. Из чего состоит JUnit 5?
 
 ```mermaid
 flowchart LR
@@ -58,7 +58,7 @@ flowchart LR
 
 ---
 
-### Q2. Базовые аннотации
+### Q2. Какие базовые аннотации нужно знать?
 
 ```java
 import org.junit.jupiter.api.*;
@@ -104,7 +104,7 @@ class CalculatorTest {
 
 ---
 
-### Q3. @DisplayName и нейминг тестов
+### Q3. Для чего используется @DisplayName и нейминг тестов?
 
 ```java
 @DisplayName("Калькулятор")
@@ -136,7 +136,7 @@ class CalculatorTest {
 
 ## Часть 2. Lifecycle и порядок выполнения
 
-### Q4. По умолчанию: новый экземпляр на каждый тест
+### Q4. Как ведёт себя новый экземпляр на каждый тест по умолчанию?
 
 ```mermaid
 sequenceDiagram
@@ -160,7 +160,7 @@ sequenceDiagram
 
 ---
 
-### Q5. @TestInstance(Lifecycle.PER_CLASS)
+### Q5. Для чего используется @TestInstance(Lifecycle.PER_CLASS)?
 
 ```java
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -185,7 +185,7 @@ class StatefulTest {
 
 ---
 
-### Q6. Порядок тестов — @TestMethodOrder
+### Q6. Что такое Порядок тестов?
 
 По умолчанию порядок недетерминирован (точнее, основан на хэшах).
 
@@ -214,7 +214,7 @@ class OrderedTest {
 
 ---
 
-### Q7. @TestClassOrder — порядок классов
+### Q7. Для чего используется @TestClassOrder?
 
 ```java
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
@@ -229,7 +229,7 @@ class TopLevelTest {
 
 ## Часть 3. Assertions и assumptions
 
-### Q8. Базовые assertions
+### Q8. Какие базовые assertions нужно знать?
 
 ```java
 import static org.junit.jupiter.api.Assertions.*;
@@ -254,7 +254,7 @@ assertLinesMatch(List.of("line1", ".*regex.*"), actualLines);
 
 ---
 
-### Q9. assertThrows и assertDoesNotThrow
+### Q9. Что такое assertThrows и assertDoesNotThrow?
 
 ```java
 @Test
@@ -273,7 +273,7 @@ void noExceptionOnValidArgs() {
 
 ---
 
-### Q10. assertAll — несколько проверок без short-circuit
+### Q10. Что такое assertAll?
 
 ```java
 @Test
@@ -293,7 +293,7 @@ void userIsValid() {
 
 ---
 
-### Q11. AssertJ — современная альтернатива
+### Q11. Что такое AssertJ и чем он лучше альтернатив?
 
 ```xml
 <dependency>
@@ -334,7 +334,7 @@ assertThat(actual)
 
 ---
 
-### Q12. assertTimeout
+### Q12. Что такое assertTimeout и зачем это нужно?
 
 ```java
 // Выполняется в текущем потоке, ждёт окончания
@@ -356,7 +356,7 @@ void preemptiveTimeout() {
 
 ---
 
-### Q13. Assumptions — пропуск теста по условию
+### Q13. Что такое Assumptions?
 
 ```java
 @Test
@@ -378,7 +378,7 @@ void onLinux() {
 
 ---
 
-### Q14. @EnabledOn... / @DisabledOn... — условные аннотации
+### Q14. Для чего используется @EnabledOn... / @DisabledOn...?
 
 ```java
 @Test
@@ -402,7 +402,7 @@ void flakyOnDemand() { }
 
 ## Часть 4. Параметризованные тесты
 
-### Q15. @ParameterizedTest — базовое
+### Q15. Для чего используется @ParameterizedTest?
 
 ```xml
 <dependency>
@@ -423,7 +423,7 @@ void positiveNumbersAreNotZero(int n) {
 
 ---
 
-### Q16. Источники параметров
+### Q16. Что такое источники параметров?
 
 **`@ValueSource`** — простые типы:
 ```java
@@ -516,7 +516,7 @@ static class MyArgsProvider implements ArgumentsProvider {
 
 ---
 
-### Q17. Кастомизация имени параметризованного теста
+### Q17. Что такое кастомизация имени параметризованного теста?
 
 ```java
 @ParameterizedTest(name = "[{index}] {0} + {1} = {2}")
@@ -536,7 +536,7 @@ void addition(int a, int b, int expected) { }
 
 ---
 
-### Q18. ArgumentsConverter и ArgumentsAggregator
+### Q18. Что такое argumentsConverter и ArgumentsAggregator?
 
 **Converter — преобразовать строку в объект:**
 ```java
@@ -562,7 +562,7 @@ static class UserAggregator implements ArgumentsAggregator {
 
 ## Часть 5. Dynamic tests и Nested
 
-### Q19. @TestFactory — динамические тесты
+### Q19. Для чего используется @TestFactory?
 
 В отличие от `@ParameterizedTest`, `@TestFactory` строит тесты в runtime — например, по списку из БД или внешнего файла.
 
@@ -590,7 +590,7 @@ DynamicContainer groupedTests() {
 
 ---
 
-### Q20. @Nested — иерархические тесты
+### Q20. Для чего используется @Nested?
 
 ```java
 @DisplayName("OrderService")
@@ -631,7 +631,7 @@ OrderService
 
 ## Часть 6. Extensions
 
-### Q21. Что такое Extension
+### Q21. Что такое Extension?
 
 **Extension** — главный механизм расширения JUnit 5. Заменяет JUnit 4 `@RunWith` + `@Rule`.
 
@@ -652,7 +652,7 @@ OrderService
 
 ---
 
-### Q22. Простой Extension — TestWatcher для скриншотов
+### Q22. Что такое Простой Extension?
 
 ```java
 public class ScreenshotOnFailureExtension implements TestWatcher {
@@ -674,7 +674,7 @@ class LoginTest { /* ... */ }
 
 ---
 
-### Q23. ParameterResolver — инжект в тесты
+### Q23. Как работает ParameterResolver?
 
 ```java
 public class UserResolver implements ParameterResolver {
@@ -709,7 +709,7 @@ void test(TestInfo info, TestReporter reporter) {
 
 ---
 
-### Q24. ExtensionContext.Store — передача данных между хуками
+### Q24. Как работает ExtensionContext.Store?
 
 ```java
 public class TraceIdExtension implements BeforeEachCallback, AfterEachCallback {
@@ -731,7 +731,7 @@ public class TraceIdExtension implements BeforeEachCallback, AfterEachCallback {
 
 ---
 
-### Q25. Регистрация extensions: @ExtendWith vs @RegisterExtension vs ServiceLoader
+### Q25. В чём разница между регистрация extensions: @ExtendWith, @RegisterExtension и ServiceLoader?
 
 **1. `@ExtendWith` (на классе или методе):**
 ```java
@@ -756,7 +756,7 @@ junit.jupiter.extensions.autodetection.enabled=true
 
 ## Часть 7. Параллелизация
 
-### Q26. Включить параллельный запуск
+### Q26. Что такое включить параллельный запуск?
 
 `src/test/resources/junit-platform.properties`:
 ```properties
@@ -778,7 +778,7 @@ junit.jupiter.execution.parallel.config.fixed.parallelism=4
 
 ---
 
-### Q27. Точечный контроль параллельности
+### Q27. Что такое точечный контроль параллельности?
 
 ```java
 // Класс выполняется параллельно с другими
@@ -797,7 +797,7 @@ void serialTest() { }
 
 ---
 
-### Q28. @ResourceLock — синхронизация по ресурсу
+### Q28. Для чего используется @ResourceLock?
 
 ```java
 @Test
@@ -813,7 +813,7 @@ void readsFromDb() { }
 
 ---
 
-### Q29. @RepeatedTest
+### Q29. Для чего используется @RepeatedTest?
 
 ```java
 @RepeatedTest(10)
@@ -831,7 +831,7 @@ void flakyHunting(RepetitionInfo info) {
 
 ## Часть 8. Интеграция с Maven и фильтрация
 
-### Q30. Maven Surefire / Failsafe для JUnit 5
+### Q30. Что такое maven Surefire / Failsafe для JUnit 5?
 
 ```xml
 <plugin>
@@ -873,7 +873,7 @@ void flakyHunting(RepetitionInfo info) {
 
 ---
 
-### Q31. Фильтрация по тегам (@Tag)
+### Q31. Что такое фильтрация по тегам (@Tag)?
 
 ```java
 @Test @Tag("smoke") void smokeTest() { }
@@ -895,7 +895,7 @@ mvn test -Dgroups="any(smoke, regression)"
 
 ---
 
-### Q32. Запуск конкретного теста / класса
+### Q32. Что такое запуск конкретного теста / класса?
 
 ```bash
 mvn test -Dtest=LoginTest

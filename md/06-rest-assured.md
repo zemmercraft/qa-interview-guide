@@ -48,7 +48,7 @@
 
 ---
 
-### Q2. Подключение в Maven
+### Q2. Что такое подключение в Maven?
 
 ```xml
 <dependency>
@@ -112,7 +112,7 @@ when().get("https://api.bank.ru/orders").then().statusCode(200);
 
 ---
 
-### Q4. HTTP-методы
+### Q4. Что такое hTTP-методы?
 
 ```java
 // GET
@@ -151,7 +151,7 @@ given().when().delete("/users/42").then().statusCode(204);
 
 ---
 
-### Q5. Параметры разных типов: queryParam, formParam, pathParam, multiPart
+### Q5. Что такое Параметры разных типов?
 
 ```java
 // query: ?status=active&limit=10
@@ -177,7 +177,7 @@ given()
 
 ---
 
-### Q6. Body — варианты передачи
+### Q6. Что такое Body?
 
 ```java
 // 1. String (сырой JSON)
@@ -206,7 +206,7 @@ given().contentType("application/octet-stream").body(byteArray)
 
 ---
 
-### Q7. Headers и Cookies
+### Q7. Что такое headers и Cookies?
 
 ```java
 given()
@@ -281,7 +281,7 @@ RestAssured.responseSpecification = Specs.ok();
 
 ---
 
-### Q9. RequestSpecBuilder — все важные методы
+### Q9. Что такое RequestSpecBuilder?
 
 ```java
 new RequestSpecBuilder()
@@ -303,7 +303,7 @@ new RequestSpecBuilder()
 
 ---
 
-### Q10. ResponseSpecBuilder — что задавать
+### Q10. Что такое ResponseSpecBuilder?
 
 ```java
 new ResponseSpecBuilder()
@@ -321,7 +321,7 @@ new ResponseSpecBuilder()
 
 ## Часть 3. Извлечение данных и десериализация
 
-### Q11. Способы получить данные из ответа
+### Q11. Что такое способы получить данные из ответа?
 
 ```java
 // 1. Cохранить весь Response
@@ -347,7 +347,7 @@ List<UserDto> users = given().when().get("/users")
 
 ---
 
-### Q12. Десериализация в POJO
+### Q12. Что такое десериализация в POJO?
 
 ```java
 public record UserDto(long id, String name, String email, Address address) {
@@ -374,7 +374,7 @@ RestAssured.config = RestAssured.config().objectMapperConfig(config);
 
 ---
 
-### Q13. Получение списков и коллекций
+### Q13. Что такое получение списков и коллекций?
 
 ```java
 // JSON: [{"id":1,"name":"a"}, {"id":2,"name":"b"}]
@@ -391,7 +391,7 @@ List<Long> ids = given().when().get("/users")
 
 ---
 
-### Q14. Сериализация запроса с настройкой Jackson
+### Q14. Что такое сериализация запроса с настройкой Jackson?
 
 ```java
 ObjectMapper jackson = new ObjectMapper()
@@ -410,7 +410,7 @@ RestAssured.config = RestAssured.config()
 
 ## Часть 4. JSON Path, XML Path, JSON Schema validation
 
-### Q15. JSON path в RestAssured — синтаксис
+### Q15. Что такое JSON path в RestAssured?
 
 JSON в примерах:
 ```json
@@ -456,7 +456,7 @@ given().when().get("/me").then()
 
 ---
 
-### Q16. JsonPath отдельно — без `then().body(...)`
+### Q16. Что такое JsonPath отдельно?
 
 ```java
 String json = given().when().get("/me").asString();
@@ -470,7 +470,7 @@ List<Integer> paidAmounts = jp.getList("orders.findAll { it.status == 'PAID' }.a
 
 ---
 
-### Q17. XmlPath — для XML/SOAP
+### Q17. Что такое XmlPath?
 
 ```java
 String xml = given().when().get("/feed.xml").asString();
@@ -487,7 +487,7 @@ List<String> titles = xp.getList("rss.channel.item.title");
 
 ---
 
-### Q18. JSON Schema validation
+### Q18. Что такое JSON Schema validation и зачем это нужно?
 
 **Схема в `src/test/resources/schema/user.json`:**
 ```json
@@ -520,7 +520,7 @@ given().when().get("/users/1")
 
 ---
 
-### Q19. Hamcrest-матчеры — что нужно знать
+### Q19. Что такое Hamcrest-матчеры?
 
 ```java
 import static org.hamcrest.Matchers.*;
@@ -545,7 +545,7 @@ import static org.hamcrest.Matchers.*;
 
 ## Часть 5. Авторизация
 
-### Q20. Bearer token
+### Q20. Что такое Bearer token и зачем это нужно?
 
 ```java
 given()
@@ -558,7 +558,7 @@ given().auth().oauth2(token).when().get("/me");
 
 ---
 
-### Q21. Basic auth
+### Q21. Что такое Basic auth и зачем это нужно?
 
 ```java
 given().auth().basic("user", "pass").when().get("/admin");
@@ -569,7 +569,7 @@ given().auth().preemptive().basic("user", "pass").when().get("/admin");
 
 ---
 
-### Q22. OAuth2 / OAuth1 / Digest
+### Q22. В чём разница между OAuth2, OAuth1 и Digest?
 
 ```java
 given().auth().oauth2(accessToken).when().get("/api");
@@ -579,7 +579,7 @@ given().auth().oauth("consumerKey", "consumerSecret", "accessToken", "tokenSecre
 
 ---
 
-### Q23. Получить токен и переиспользовать
+### Q23. Что такое получить токен и переиспользовать?
 
 ```java
 String token = given()
@@ -602,7 +602,7 @@ given(authedSpec).when().get("/me").then().statusCode(200);
 
 ---
 
-### Q24. Клиентские сертификаты и self-signed SSL
+### Q24. Что такое клиентские сертификаты и self-signed SSL?
 
 ```java
 // Игнорировать self-signed сертификаты
@@ -623,7 +623,7 @@ given().auth().certificate("/path/to/keystore.p12", "passwd",
 
 ## Часть 6. Filters, логирование, Allure
 
-### Q25. Logging — что и когда логировать
+### Q25. Что такое Logging?
 
 **В тестах часто:**
 ```java
@@ -651,7 +651,7 @@ RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
 
 ---
 
-### Q26. Allure-фильтр
+### Q26. Что такое allure-фильтр?
 
 ```java
 // pom.xml: io.qameta.allure:allure-rest-assured
@@ -670,7 +670,7 @@ given().filter(new AllureRestAssured())
 
 ---
 
-### Q27. Кастомный Filter — общая схема
+### Q27. Что такое Кастомный Filter?
 
 ```java
 public class TraceIdFilter implements Filter {
@@ -698,7 +698,7 @@ given().filter(new TraceIdFilter()).when().get("/users");
 
 ---
 
-### Q28. Замер времени и SLA-проверки
+### Q28. Что такое замер времени и SLA-проверки?
 
 ```java
 given().when().get("/users/1")
@@ -713,13 +713,13 @@ assertThat(ms).isLessThan(2000);
 
 ## Часть 7. Подводные камни и продвинутые темы
 
-### Q29. RestAssured и `relaxedHTTPSValidation()` — когда нельзя использовать
+### Q29. Что такое RestAssured и relaxedHTTPSValidation()?
 
 В **проде** — никогда. Это отключает проверку сертификата. На стейдже с self-signed — допустимо, но осознанно.
 
 ---
 
-### Q30. Тайм-ауты соединения
+### Q30. Что такое тайм-ауты соединения?
 
 ```java
 RestAssured.config = RestAssured.config()
@@ -731,7 +731,7 @@ RestAssured.config = RestAssured.config()
 
 ---
 
-### Q31. Сериализация даты/времени
+### Q31. Что такое сериализация даты/времени?
 
 **Проблема:** `LocalDateTime` сериализуется как массив или ISO-строка в зависимости от настроек Jackson.
 
@@ -750,7 +750,7 @@ RestAssured.config = RestAssured.config()
 
 ---
 
-### Q32. Параллельные тесты с RestAssured — thread-safety
+### Q32. Что такое Параллельные тесты с RestAssured?
 
 `RequestSpecification`, собранный через `RequestSpecBuilder`, **immutable** и **thread-safe** при правильном использовании (без мутации после `build()`).
 
@@ -773,7 +773,7 @@ given(Specs.AUTHED).when().get("/me");
 
 ---
 
-### Q33. RestAssured + Spring (если используешь Spring в фреймворке)
+### Q33. Что такое restAssured + Spring (если используешь Spring в фреймворке)?
 
 ```java
 @Configuration
@@ -822,7 +822,7 @@ public class OrderApiClient {
 
 ---
 
-### Q35. Типичные ошибки на собеседовании
+### Q35. Что такое типичные ошибки на собеседовании?
 
 | Ошибка                                                      | Почему плохо                       | Как правильно                                  |
 | ----------------------------------------------------------- | ---------------------------------- | ---------------------------------------------- |
